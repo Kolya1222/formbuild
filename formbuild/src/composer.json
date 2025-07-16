@@ -1,0 +1,19 @@
+{
+  "name": "evolutioncms/formbuild",
+  "require": {
+
+  },
+  "autoload": {
+    "psr-4": {
+      "EvolutionCMS\\Formbuild\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "EvolutionCMS\\Formbuild\\FormbuildServiceProvider"
+      ]
+
+    }
+  }
+}
