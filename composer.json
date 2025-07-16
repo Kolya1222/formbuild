@@ -1,0 +1,16 @@
+{
+    "name": "kolya1222/formbuild",
+    "description": "Модуль для создания запросов к FormLister",
+    "autoload": {
+        "psr-4": {
+            "EvolutionCMS\\formbuild\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EvolutionCMS\\formbuild\\formbuildServiceProvider"
+            ]
+        }
+    }
+}
