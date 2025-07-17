@@ -1,13 +1,13 @@
 :root {
-    --primary-color: #4e73df;
+    --primary-color: #198754;
     --secondary-color: #f8f9fc;
-    --accent-color: #2e59d9;
+    --accent-color: #28a745;
     --text-color: #5a5c69;
 }
 
-body {
+.sectionBody {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fc;
+    background-color: #e8f5e933;
     color: var(--text-color);
 }
 
@@ -88,7 +88,9 @@ body {
     font-weight: bold;
     border-bottom: 2px solid var(--primary-color);
 }
-
+.nav-link{
+    color: black;
+}
 .btn-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);

@@ -81,7 +81,7 @@
                                 <h4>Нет полей в форме</h4>
                                 <p>Перетащите сюда поля из панели выше или нажмите "Добавить поле"</p>
                                 <button class="btn btn-primary" onclick="addField()">
-                                    <i class="bi bi-plus-circle"></i> Добавить поле
+                                    <i class="bi bi-plus-circle fs-6"></i> Добавить поле
                                 </button>
                             </div>
                         </div>
@@ -114,9 +114,23 @@
                             <label class="form-label">Действие формы (action)</label>
                             <input type="text" class="form-control" id="formAction" value="">
                         </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="formMultipart">
-                            <label class="form-check-label" for="formMultipart">Форма содержит файловые поля (multipart)</label>
+                        <div class="mb-3">
+                            <label class="form-label">Почта куда приходят письма</label>
+                            <input type="text" class="form-control" id="formEmail" value="">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="formMultipart">
+                                    <label class="form-check-label" for="formMultipart">Форма содержит файловые поля (multipart)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" class="form-check-input" id="formSender">
+                                    <label class="form-check-label" for="formSender">Форма отправляется без перезагрузки</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,4 +293,3 @@
     </div>
     
 @endsection
-
