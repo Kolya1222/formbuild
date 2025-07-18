@@ -3,13 +3,13 @@
     "description": "Модуль для создания запросов к FormLister/Sender",
     "autoload": {
         "psr-4": {
-            "Kolya1222\\FormBuild\\": "src"
+            "Kolya1222\\Formbuild\\": "src"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Kolya1222\\FormBuild\\FormbuildServiceProvider"
+                "Kolya1222\\Formbuild\\FormbuildServiceProvider"
             ]
         }
     }
