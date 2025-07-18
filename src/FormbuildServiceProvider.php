@@ -4,7 +4,7 @@ use EvolutionCMS\ServiceProvider;
 
 class FormbuildServiceProvider extends ServiceProvider
 {
-    protected $namespace = 'formbuild';
+    protected $namespace = 'Formbuild';
     public function register()
     {
         $this->app->registerRoutingModule(
