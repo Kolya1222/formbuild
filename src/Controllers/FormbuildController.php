@@ -21,6 +21,6 @@ class FormbuildController
 
     public function index(Request $request)
     {
-        return response()->view('formbuild::index');
+        return response()->view('Formbuild::index');
     }
 }
