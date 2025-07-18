@@ -1,8 +1,8 @@
 <?php
 
-namespace EvolutionCMS\Formbuild\Controllers;
+namespace Kolya1222\Formbuild\Controllers;
 
-use EvolutionCMS\Formbuild\Services\{Module};
+use Kolya1222\Formbuild\Services\{Module};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 
