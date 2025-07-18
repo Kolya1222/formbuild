@@ -1,5 +1,5 @@
 {
-    "name": "kolya1222/formbuild",
+    "name": "kolya1222/formbuildevo",
     "description": "Модуль для создания запросов к FormLister/Sender",
     "autoload": {
         "psr-4": {
