@@ -9,7 +9,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Kolya1222\\FormBuild\\FormBuildServiceProvider"
+                "Kolya1222\\FormBuild\\FormbuildServiceProvider"
             ]
         }
     }
