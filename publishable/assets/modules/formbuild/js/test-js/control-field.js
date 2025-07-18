@@ -7,8 +7,8 @@ export function hideTooltip(element) {
 }
 
 // Общая функция для инициализации tooltip
-function initTooltips(element) {
-    const tooltipTriggerList = [].slice.call(element.querySelectorAll('[data-bs-toggle="tooltip"]'));
+export function initTooltips(context = document) {
+    const tooltipTriggerList = [].slice.call(context.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
         trigger: 'hover focus',
         placement: 'auto',
