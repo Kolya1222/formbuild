@@ -1,152 +1,126 @@
 let fieldCount = 0;
+
+// Общая функция для скрытия tooltip
 export function hideTooltip(element) {
     const tooltip = bootstrap.Tooltip.getInstance(element);
-    if (tooltip) {
-        tooltip.hide();
-    }
+    tooltip?.hide();
 }
 
-// Добавление нового поля
-export function addField() {
+// Общая функция для инициализации tooltip
+function initTooltips(element) {
+    const tooltipTriggerList = [].slice.call(element.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
+        trigger: 'hover focus',
+        placement: 'auto',
+        delay: { show: 100, hide: 100 }
+    }));
+}
+
+// Общая функция для создания нового поля
+function createNewField(id) {
     const formFields = document.getElementById('formFields');
     const emptyState = document.getElementById('emptyState');
     
-    if (emptyState) {
-        emptyState.style.display = 'none';
-    }
+    // Исправлено: теперь это присваивание, а не сравнение
+    if (emptyState) emptyState.style.display = 'none';
+    
     const newField = document.createElement('div');
     newField.innerHTML = document.getElementById('fieldTemplate').innerHTML
-        .replace(/{id}/g, fieldCount)
-        .replace(/{number}/g, fieldCount + 1);
+        .replace(/{id}/g, id)
+        .replace(/{number}/g, id + 1);
     
     formFields.appendChild(newField);
-    // Добавляем обработчики drag and drop для нового поля
-    newField.querySelector('.form-field').addEventListener('dragend', function() {
+    
+    // Добавляем обработчики drag and drop
+    const fieldElement = newField.querySelector('.form-field');
+    fieldElement.addEventListener('dragend', function() {
         this.classList.remove('dragging');
         document.querySelectorAll('.form-field').forEach(field => {
             field.style.borderTop = '';
         });
     });
-    const tooltipTriggerList = [].slice.call(newField.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
     
+    initTooltips(newField);
+    return fieldElement;
+}
+
+// Добавление нового поля
+export function addField() {
+    createNewField(fieldCount);
     editFieldSettings(fieldCount);
-    
     fieldCount++;
 }
 
-
+// Удаление поля
 export function removeField(id) {
     // Скрываем tooltip кнопки удаления
-    const button = document.querySelector(`#field-${id} [onclick="removeField(${id})"]`);
-    if (button) hideTooltip(button);
+    const button = document.querySelector(`#field-${id} [onclick*="removeField(${id})"]`);
+    hideTooltip(button);
 
-    const fieldWrapper = document.querySelector(`#field-${id}`).parentNode; // Находим обёртку
-    if (fieldWrapper) fieldWrapper.remove(); // Удаляем всю обёртку
+    document.querySelector(`#field-${id}`)?.parentNode?.remove();
 
-    // Проверяем, есть ли ещё поля внутри #formFields
+    // Проверяем наличие полей
     const hasFields = document.querySelectorAll('#formFields > div > .form-field').length > 0;
-    
     if (!hasFields) {
         document.getElementById('emptyState').style.display = 'block';
     }
     
     generateMarkup();
-}      
+}
+
+// Типы полей и их настройки
+const FIELD_TYPES = {
+    text: { label: 'Текстовое поле', name: 'text_' },
+    email: { label: 'Email', name: 'email' },
+    tel: { label: 'Телефон', name: 'phone' },
+    password: { label: 'Пароль', name: 'password' },
+    number: { label: 'Число', name: 'number' },
+    textarea: { label: 'Текстовая область', name: 'message' },
+    select: { 
+        label: 'Выпадающий список', 
+        name: 'select',
+        options: "option1 : Вариант 1\noption2 : Вариант 2\noption3 : Вариант 3"
+    },
+    checkbox: { 
+        label: 'Чекбокс', 
+        name: 'agree',
+        value: '1'
+    },
+    radio: { 
+        label: 'Радиокнопки', 
+        name: 'radio_group',
+        options: "option1 : Вариант 1\noption2 : Вариант 2"
+    },
+    file: { label: 'Загрузка файла', name: 'file' },
+    hidden: { 
+        label: 'Скрытое поле', 
+        name: 'hidden_field',
+        value: 'default_value'
+    },
+    date: { label: 'Дата', name: 'date' }
+};
+
 // Функция для добавления поля определенного типа
 export function addFieldByType(type) {
     const fieldId = fieldCount++;
-    const formFields = document.getElementById('formFields');
-    const emptyState = document.getElementById('emptyState');
+    const fieldElement = createNewField(fieldId);
     
-    if (emptyState) {
-        emptyState.style.display = 'none';
-    }
+    if (!fieldElement) return;
     
-    const newField = document.createElement('div');
-    newField.innerHTML = document.getElementById('fieldTemplate').innerHTML
-        .replace(/{id}/g, fieldId)
-        .replace(/{number}/g, fieldId + 1);
+    const typeConfig = FIELD_TYPES[type] || FIELD_TYPES.text;
+    const name = typeConfig.name + (type === 'text' ? fieldId : '');
     
-    formFields.appendChild(newField);
-    
-    // Устанавливаем тип поля
-    const fieldElement = document.getElementById(`field-${fieldId}`);
+    // Устанавливаем атрибуты поля
     fieldElement.dataset.type = type;
-    
-    // Устанавливаем стандартные значения для типа
-    let label = '';
-    let name = `field${fieldId}`;
-    
-    switch(type) {
-        case 'text':
-            label = 'Текстовое поле';
-            name = 'text_' + fieldId;
-            break;
-        case 'email':
-            label = 'Email';
-            name = 'email';
-            break;
-        case 'tel':
-            label = 'Телефон';
-            name = 'phone';
-            break;
-        case 'password':
-            label = 'Пароль';
-            name = 'password';
-            break;
-        case 'number':
-            label = 'Число';
-            name = 'number';
-            break;
-        case 'textarea':
-            label = 'Текстовая область';
-            name = 'message';
-            break;
-        case 'select':
-            label = 'Выпадающий список';
-            name = 'select';
-            fieldElement.dataset.options = "option1 : Вариант 1\noption2 : Вариант 2\noption3 : Вариант 3";
-            break;
-        case 'checkbox':
-            label = 'Чекбокс';
-            name = 'agree';
-            fieldElement.dataset.value = '1';
-            break;
-        case 'radio':
-            label = 'Радиокнопки';
-            name = 'radio_group';
-            fieldElement.dataset.options = "option1 : Вариант 1\noption2 : Вариант 2";
-            break;
-        case 'file':
-            label = 'Загрузка файла';
-            name = 'file';
-            break;
-        case 'hidden':
-            label = 'Скрытое поле';
-            name = 'hidden_field';
-            fieldElement.dataset.value = 'default_value';
-            break;
-        case 'date':
-            label = 'Дата';
-            name = 'date';
-            break;
-    }
+    if (typeConfig.options) fieldElement.dataset.options = typeConfig.options;
+    if (typeConfig.value) fieldElement.dataset.value = typeConfig.value;
     
     // Обновляем отображение поля
-    fieldElement.querySelector('.field-title').textContent = label;
+    fieldElement.querySelector('.field-title').textContent = typeConfig.label;
     fieldElement.querySelector('.field-type-badge').textContent = type;
     fieldElement.querySelector('.field-name-summary').textContent = name;
-    fieldElement.querySelector('.field-label-summary').textContent = label;
+    fieldElement.querySelector('.field-label-summary').textContent = typeConfig.label;
     
-    // Инициализация tooltip
-    const tooltipTriggerList = [].slice.call(newField.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-    
-    // Открываем настройки для нового поля
+    // Открываем настройки
     editFieldSettings(fieldId);
-}  
+}

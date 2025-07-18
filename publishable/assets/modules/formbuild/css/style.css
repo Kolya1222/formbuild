@@ -91,6 +91,9 @@
 .nav-link{
     color: black;
 }
+.nav-link:hover{
+    color: var(--primary-color);
+}
 .btn-primary {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
@@ -225,4 +228,96 @@
 #formFields.drag-over {
     background-color: rgba(78, 115, 223, 0.1);
     border: 2px dashed var(--primary-color);
+}
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 4px;
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+.highlight {
+    animation: highlightFade 2s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes highlightFade {
+    0% { background-color: rgba(72, 199, 116, 0.1); }
+    50% { background-color: rgba(72, 199, 116, 0.3); }
+    100% { background-color: transparent; }
+}
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+.form-check-input {
+    border-color: #ced4da;
+    cursor: pointer;
+}
+
+/* Для более плавного перехода при наведении */
+.form-check-input:hover {
+    border-color: var(--accent-color);
+}
+/* Стили для drag and drop */
+.form-fields-container {
+    padding: 15px;
+    border-radius: 8px;
+}
+
+#formFields.drag-active {
+    background-color: rgba(13, 110, 253, 0.05);
+    border: 2px dashed var(--primary);
+}
+
+#formFields.drag-over-new {
+    background-color: rgba(25, 135, 84, 0.05);
+    border: 2px dashed var(--success);
+}
+
+.empty-state.drag-active {
+    transform: scale(1.02);
+}
+
+.empty-state.drag-over-new {
+    background-color: rgba(25, 135, 84, 0.1);
+    border-color: var(--success);
+}
+
+.form-field.dragging {
+    opacity: 0.5;
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.form-field.reorder-mode {
+    position: relative;
+}
+
+.form-field.reorder-mode::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+}
+
+.field-type.dragging {
+    opacity: 0.7;
+    transform: scale(1.05);
 }

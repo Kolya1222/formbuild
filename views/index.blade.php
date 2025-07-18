@@ -75,14 +75,16 @@
                     </div>
                     
                     <div class="card-body">
-                        <div id="formFields">
-                            <div class="empty-state" id="emptyState">
-                                <i class="bi bi-input-cursor-text"></i>
-                                <h4>Нет полей в форме</h4>
-                                <p>Перетащите сюда поля из панели выше или нажмите "Добавить поле"</p>
-                                <button class="btn btn-primary" onclick="addField()">
-                                    <i class="bi bi-plus-circle fs-6"></i> Добавить поле
-                                </button>
+                        <div class="form-fields-container">
+                            <div id="formFields">
+                                <div class="empty-state" id="emptyState">
+                                    <i class="bi bi-input-cursor-text"></i>
+                                    <h4>Нет полей в форме</h4>
+                                    <p>Перетащите сюда поля из панели выше или нажмите "Добавить поле"</p>
+                                    <button class="btn btn-primary" onclick="addField()">
+                                        <i class="bi bi-plus-circle fs-6"></i> Добавить поле
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -103,9 +105,18 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label">Метод отправки</label>
-                                    <select class="form-select" id="formMethod">
-                                        <option value="post">POST</option>
-                                        <option value="get">GET</option>
+                                    <div class="custom-select">
+                                        <div class="custom-select__selected" id="formMethodSelected">
+                                            POST
+                                        </div>
+                                        <div class="custom-select__options">
+                                            <div class="custom-select__option" data-value="POST">POST</div>
+                                            <div class="custom-select__option" data-value="GET">GET</div>
+                                        </div>
+                                    </div>
+                                    <select id="formMethod" name="formMethod" class="d-none">
+                                        <option value="POST" selected>POST</option>
+                                        <option value="GET">GET</option>
                                     </select>
                                 </div>
                             </div>
@@ -147,7 +158,7 @@
                                 <button class="nav-link active" id="html-tab" data-bs-toggle="tab" data-bs-target="#html-tab-pane" type="button" role="tab">HTML</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="formlister-tab" data-bs-toggle="tab" data-bs-target="#formlister-tab-pane" type="button" role="tab">FormLister</button>
+                                <button class="nav-link" id="formlister-tab" data-bs-toggle="tab" data-bs-target="#formlister-tab-pane" type="button" role="tab">FormLister/Sender</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-tab-pane" type="button" role="tab">Превью</button>
@@ -274,7 +285,7 @@
                         <i class="bi bi-gear"></i>
                     </button>
                     <button class="btn btn-sm btn-outline-danger" onclick="removeField({id})" 
-                            data-bs-toggle="tooltip" data-bs-placement="top" title="Удалить"
+                            data-bs-toggle="tooltip" title="Удалить"
                             onmouseleave="hideTooltip(this)">
                         <i class="bi bi-trash"></i>
                     </button>

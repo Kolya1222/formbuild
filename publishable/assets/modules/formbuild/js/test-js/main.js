@@ -1,31 +1,68 @@
 import { initDragAndDropSystem } from './drag-drop.js';
 import { generateMarkup } from './render-form.js';
 import { editFieldSettings, updateFieldSettingsForm, saveFieldSettings } from './FormSettings.js';
-import { hideTooltip, addField, removeField, addFieldByType } from './control-field.js';
+import { hideTooltip, addField, removeField, addFieldByType, initTooltips } from './control-field.js';
 
 // Делаем функции глобальными для доступа из HTML
-window.copyToClipboard = copyToClipboard;
-window.editFieldSettings = editFieldSettings;
-window.updateFieldSettingsForm = updateFieldSettingsForm;
-window.saveFieldSettings = saveFieldSettings;
-window.removeField = removeField;
-window.addFieldByType = addFieldByType;
-window.addField = addField;
-window.hideTooltip = hideTooltip;
-window.generateMarkup = generateMarkup;
+const GLOBAL_FUNCTIONS = {
+    copyToClipboard,
+    editFieldSettings,
+    updateFieldSettingsForm,
+    saveFieldSettings,
+    removeField,
+    addFieldByType,
+    addField,
+    hideTooltip,
+    generateMarkup
+};
+
+Object.entries(GLOBAL_FUNCTIONS).forEach(([name, fn]) => {
+    window[name] = fn;
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     // Инициализация tooltips
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl, {
-            trigger: 'hover focus',
-            delay: { "show": 100, "hide": 100 }
-        });
-    });
+    initTooltips();
 
     // Инициализация drag-and-drop
     initDragAndDropSystem();
+    const customSelects = document.querySelectorAll('.custom-select');
+    
+    customSelects.forEach(select => {
+        const selected = select.querySelector('.custom-select__selected');
+        const options = select.querySelectorAll('.custom-select__option');
+        const hiddenSelect = document.getElementById('formMethod');
+        
+        // Открытие/закрытие списка
+        selected.addEventListener('click', function() {
+            select.classList.toggle('open');
+        });
+        
+        // Выбор опции
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                // Обновляем видимый текст
+                selected.textContent = this.textContent;
+                
+                // Обновляем скрытый select
+                hiddenSelect.value = this.dataset.value;
+                
+                // Помечаем выбранную опцию
+                options.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Закрываем список
+                select.classList.remove('open');
+            });
+        });
+        
+        // Закрытие при клике вне списка
+        document.addEventListener('click', function(e) {
+            if (!select.contains(e.target)) {
+                select.classList.remove('open');
+            }
+        });
+    });
 });
 
 function copyToClipboard(elementId) {
@@ -35,29 +72,43 @@ function copyToClipboard(elementId) {
     navigator.clipboard.writeText(text).then(() => {
         const copyIcon = element.nextElementSibling;
         const tooltip = bootstrap.Tooltip.getInstance(copyIcon);
-        const originalTitle = copyIcon.getAttribute('title') || 
-                            copyIcon.getAttribute('data-bs-original-title');
+        const originalTitle = copyIcon.getAttribute('data-bs-original-title') || 
+                            copyIcon.getAttribute('title');
         
+        // Сохраняем оригинальный title для восстановления
         copyIcon.setAttribute('data-bs-original-title', 'Скопировано!');
         
+        // Уничтожаем текущий tooltip, если он есть
         if (tooltip) {
             tooltip.dispose();
         }
         
+        // Создаем новый tooltip с ручным управлением
         const newTooltip = new bootstrap.Tooltip(copyIcon, {
+            placement: 'auto',
             trigger: 'manual'
         });
         
+        // Показываем сообщение "Скопировано!"
         newTooltip.show();
         
         setTimeout(() => {
             newTooltip.hide();
             setTimeout(() => {
-                copyIcon.setAttribute('data-bs-original-title', originalTitle);
+                // Восстанавливаем оригинальный title и нормальное поведение tooltip
                 newTooltip.dispose();
-                new bootstrap.Tooltip(copyIcon);
+                
+                // Восстанавливаем оригинальный заголовок
+                copyIcon.setAttribute('data-bs-original-title', originalTitle);
+                copyIcon.setAttribute('title', originalTitle);
+                
+                // Создаем tooltip с автоматическим показом при наведении
+                new bootstrap.Tooltip(copyIcon, {
+                    placement: 'auto',
+                    trigger: 'hover focus'
+                });
             }, 300);
-        }, 2000);
+        }, 1000);
         
     }).catch(err => {
         console.error('Ошибка при копировании: ', err);
