@@ -1,10 +1,10 @@
-@extends('formbuild::layout')
+@extends('Formbuild::layout')
 
 @section('buttons')
     <div id="actions">
         <div class="btn-group">
             <a href="javascript:;" class="btn btn-success" onclick="location.reload();">
-                <i class="fa fa-refresh"></i><span>@lang('formbuild::global.refresh')</span>
+                <i class="fa fa-refresh"></i><span>@lang('Formbuild::global.refresh')</span>
             </a>
         </div>
     </div>
