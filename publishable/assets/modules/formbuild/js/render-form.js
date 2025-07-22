@@ -7,7 +7,7 @@ export function generateMarkup() {
         const formMultipart = document.getElementById('formMultipart').checked;
         const formSender = document.getElementById('formSender').checked;
         const formEmail = document.getElementById('formEmail').value || '';
-        
+        window.currentFormId = formId;
         
         let htmlOutput = '';
         let previewOutput = '';
@@ -314,7 +314,7 @@ export function generateMarkup() {
             paramsOutput += `    ]);\n`;
             paramsOutput += `}\n`;
         }
-
+        window.FormBuilder = paramsOutput;
         document.getElementById('outputHtml').textContent = htmlOutput;
         document.getElementById('outputParams').textContent = paramsOutput;
         document.getElementById('formPreview').innerHTML = previewOutput;

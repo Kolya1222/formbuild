@@ -16,7 +16,7 @@
             <h1><i class="bi bi-input-cursor-text"></i> @lang('Formbuild::form.generator_title')</h1>
             <p class="lead">@lang('Formbuild::form.generator_subtitle')</p>
         </header>
-        
+
         <div class="row">
             <div class="col-lg-8">
                 <div class="card">
@@ -31,7 +31,7 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <!-- Панель с типами полей -->
                     <div class="card-body py-2 border-bottom">
                         <div class="d-flex flex-wrap gap-2" id="fieldTypesPanel">
@@ -73,7 +73,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="card-body">
                         <div class="form-fields-container">
                             <div id="formFields">
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card">
                     <div class="card-header">
                         <i class="bi bi-gear"></i> @lang('Formbuild::form.form_settings')
@@ -138,7 +138,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="formSender">
+                                    <input type="checkbox" class="form-check-input" id="formSender" checked>
                                     <label class="form-check-label" for="formSender">@lang('Formbuild::form.ajax_send')</label>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
@@ -155,29 +155,43 @@
                     <div class="card-body">
                         <ul class="nav nav-tabs" id="outputTabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="html-tab" data-bs-toggle="tab" data-bs-target="#html-tab-pane" type="button" role="tab">HTML</button>
+                                <button class="nav-link active" id="html-tab" data-bs-toggle="tab"
+                                    data-bs-target="#html-tab-pane" type="button" role="tab">HTML</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="formlister-tab" data-bs-toggle="tab" data-bs-target="#formlister-tab-pane" type="button" role="tab">FormLister/Sender</button>
+                                <button class="nav-link" id="formlister-tab" data-bs-toggle="tab"
+                                    data-bs-target="#formlister-tab-pane" type="button"
+                                    role="tab">FormLister/Sender</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-tab-pane" type="button" role="tab">@lang('Formbuild::form.preview')</button>
+                                <button class="nav-link" id="preview-tab" data-bs-toggle="tab"
+                                    data-bs-target="#preview-tab-pane" type="button"
+                                    role="tab">@lang('Formbuild::form.preview')</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="outputTabsContent">
-                            <div class="tab-pane fade show active" id="html-tab-pane" role="tabpanel" aria-labelledby="html-tab">
+                            <div class="tab-pane fade show active" id="html-tab-pane" role="tabpanel"
+                                aria-labelledby="html-tab">
                                 <div class="position-relative">
                                     <div id="outputHtml" class="output-code">...</div>
-                                    <i class="bi bi-clipboard copy-btn" title="@lang('Formbuild::form.copy')" data-bs-toggle="tooltip" onclick="copyToClipboard('outputHtml')"></i>
+                                    <i class="bi bi-clipboard copy-btn" title="@lang('Formbuild::form.copy')"
+                                        data-bs-toggle="tooltip" onclick="copyToClipboard('outputHtml')"></i>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="formlister-tab-pane" role="tabpanel" aria-labelledby="formlister-tab">
+                            <div class="tab-pane fade" id="formlister-tab-pane" role="tabpanel"
+                                aria-labelledby="formlister-tab">
                                 <div class="position-relative">
                                     <div id="outputParams" class="output-code">@lang('Formbuild::form.params_placeholder')</div>
-                                    <i class="bi bi-clipboard copy-btn" title="@lang('Formbuild::form.copy')" onclick="copyToClipboard('outputParams')"></i>
+                                    <i class="bi bi-clipboard copy-btn" title="@lang('Formbuild::form.copy')"
+                                        onclick="copyToClipboard('outputParams')"></i>
+                                    <button class="btn btn-sm btn-success" onclick="confirmFileGeneration()"
+                                        data-route="{{ route('Formbuild::generate-file') }}" id="generateFileButton" style="display: none;">
+                                        Создать файл
+                                    </button>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="preview-tab-pane" role="tabpanel" aria-labelledby="preview-tab">
+                            <div class="tab-pane fade" id="preview-tab-pane" role="tabpanel"
+                                aria-labelledby="preview-tab">
                                 <div class="form-preview" id="formPreview">
                                     @lang('Formbuild::form.preview_placeholder')
                                 </div>
@@ -185,7 +199,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card mt-4">
                     <div class="card-header">
                         <i class="bi bi-lightbulb"></i> @lang('Formbuild::form.tips')
@@ -200,7 +214,8 @@
                                 <li>@lang('Formbuild::form.tip_validation_rules')</li>
                             </ul>
                         </div>
-                        <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#helpModal">
+                        <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal"
+                            data-bs-target="#helpModal">
                             <i class="bi bi-question-circle"></i> @lang('Formbuild::form.help')
                         </button>
                     </div>
@@ -208,9 +223,10 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modal -->
-    <div class="modal fade" id="fieldSettingsModal" tabindex="-1" aria-labelledby="fieldSettingsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="fieldSettingsModal" tabindex="-1" aria-labelledby="fieldSettingsModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -222,18 +238,20 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('Formbuild::form.close')</button>
-                    <button type="button" class="btn btn-primary" onclick="saveFieldSettings()">@lang('Formbuild::form.save')</button>
+                    <button type="button" class="btn btn-primary"
+                        onclick="saveFieldSettings()">@lang('Formbuild::form.save')</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!-- Help Modal -->
     <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="helpModalLabel"><i class="bi bi-question-circle"></i> @lang('Formbuild::form.help_title')</h5>
+                    <h5 class="modal-title" id="helpModalLabel"><i class="bi bi-question-circle"></i> @lang('Formbuild::form.help_title')
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -245,7 +263,7 @@
                         <li>@lang('Formbuild::form.step4')</li>
                         <li>@lang('Formbuild::form.step5')</li>
                     </ol>
-                    
+
                     <h6 class="mt-4">@lang('Formbuild::form.features'):</h6>
                     <ul>
                         <li>@lang('Formbuild::form.feature1')</li>
@@ -253,7 +271,7 @@
                         <li>@lang('Formbuild::form.feature3')</li>
                         <li>@lang('Formbuild::form.feature4')</li>
                     </ul>
-                    
+
                     <div class="alert alert-warning mt-4">
                         <i class="bi bi-exclamation-triangle"></i> @lang('Formbuild::form.file_warning'):
                         <ul>
@@ -269,7 +287,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Field Template (hidden) -->
     <div id="fieldTemplate" class="d-none">
         <div class="form-field" id="field-{id}" draggable="true">
@@ -281,26 +299,26 @@
                     <span class="badge badge-required ms-1 field-required-badge d-none">@lang('Formbuild::form.required')</span>
                 </h5>
                 <div>
-                    <button class="btn btn-sm btn-outline-secondary me-1" onclick="editFieldSettings({id})" data-bs-toggle="tooltip" title="@lang('Formbuild::form.settings')">
+                    <button class="btn btn-sm btn-outline-secondary me-1" onclick="editFieldSettings({id})"
+                        data-bs-toggle="tooltip" title="@lang('Formbuild::form.settings')">
                         <i class="bi bi-gear"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-danger" onclick="removeField({id})" 
-                            data-bs-toggle="tooltip" title="@lang('Formbuild::form.delete')"
-                            onmouseleave="hideTooltip(this)">
+                    <button class="btn btn-sm btn-outline-danger" onclick="removeField({id})" data-bs-toggle="tooltip"
+                        title="@lang('Formbuild::form.delete')" onmouseleave="hideTooltip(this)">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
             </div>
-            
+
             <div class="field-summary">
                 <div><strong>@lang('Formbuild::form.name'):</strong> <span class="field-name-summary">field{id}</span></div>
-                <div><strong>@lang('Formbuild::form.label'):</strong> <span class="field-label-summary">@lang('Formbuild::form.field') #{number}</span></div>
+                <div><strong>@lang('Formbuild::form.label'):</strong> <span class="field-label-summary">@lang('Formbuild::form.field')
+                        #{number}</span></div>
             </div>
-            
+
             <div class="field-options d-none" id="field-options-{id}">
                 <!-- Дополнительные опции для разных типов полей -->
             </div>
         </div>
     </div>
-    
 @endsection
