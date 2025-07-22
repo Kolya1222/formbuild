@@ -7,17 +7,15 @@ export function confirmFileGeneration() {
 
  async function generateFormFile(formId) {
     try {
-        const button = document.querySelector('button[onclick="confirmFileGeneration()"]');
+        const button = document.getElementById('generateFileButton');
         const route = button.dataset.route; // Получаем route из data-атрибута кнопки
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
         if (!csrfToken) {
             throw new Error("CSRF token not found!");
         }
 
-        const contentElement = FormBuilder;
-        if (!contentElement) throw new Error('Элемент с содержимым формы не найден');
-        
         const content = FormBuilder;
+        if (!content) throw new Error('Элемент с содержимым формы не найден');
         
         const response = await fetch(route, {
             method: 'POST',
@@ -28,7 +26,7 @@ export function confirmFileGeneration() {
             body: JSON.stringify({
                 formId: formId,
                 content: content,
-                _token: document.querySelector('meta[name="csrf-token"]').content
+                _token: csrfToken
             })
         });
         
@@ -43,6 +41,3 @@ export function confirmFileGeneration() {
         alert(`Ошибка при создании файла: ${error.message}`);
     }
 }
-
-window.confirmFileGeneration = confirmFileGeneration;
-window.generateFormFile = generateFormFile;
