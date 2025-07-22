@@ -13,63 +13,63 @@
 @section('body')
     <div class="app-container">
         <header class="app-header text-center">
-            <h1><i class="bi bi-input-cursor-text"></i> Генератор форм с FormLister</h1>
-            <p class="lead">Создавайте профессиональные формы с валидацией для Evolution CMS</p>
+            <h1><i class="bi bi-input-cursor-text"></i> @lang('Formbuild::form.generator_title')</h1>
+            <p class="lead">@lang('Formbuild::form.generator_subtitle')</p>
         </header>
         
         <div class="row">
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-pencil-square"></i> Конструктор формы</span>
+                        <span><i class="bi bi-pencil-square"></i> @lang('Formbuild::form.form_builder')</span>
                         <div>
                             <button class="btn btn-sm btn-primary me-2" onclick="addField()">
-                                <i class="bi bi-plus-circle"></i> Добавить поле
+                                <i class="bi bi-plus-circle"></i> @lang('Formbuild::form.add_field')
                             </button>
                             <button class="btn btn-sm btn-success" onclick="generateMarkup()">
-                                <i class="bi bi-magic"></i> Сгенерировать
+                                <i class="bi bi-magic"></i> @lang('Formbuild::form.generate')
                             </button>
                         </div>
                     </div>
                     
-                    <!-- Добавляем панель с типами полей -->
+                    <!-- Панель с типами полей -->
                     <div class="card-body py-2 border-bottom">
                         <div class="d-flex flex-wrap gap-2" id="fieldTypesPanel">
                             <div class="field-type" draggable="true" data-type="text">
-                                <i class="bi bi-input-cursor-text"></i> Текстовое поле
+                                <i class="bi bi-input-cursor-text"></i> @lang('Formbuild::field_types.text')
                             </div>
                             <div class="field-type" draggable="true" data-type="email">
-                                <i class="bi bi-envelope"></i> Email
+                                <i class="bi bi-envelope"></i> @lang('Formbuild::field_types.email')
                             </div>
                             <div class="field-type" draggable="true" data-type="tel">
-                                <i class="bi bi-telephone"></i> Телефон
+                                <i class="bi bi-telephone"></i> @lang('Formbuild::field_types.tel')
                             </div>
                             <div class="field-type" draggable="true" data-type="password">
-                                <i class="bi bi-lock"></i> Пароль
+                                <i class="bi bi-lock"></i> @lang('Formbuild::field_types.password')
                             </div>
                             <div class="field-type" draggable="true" data-type="number">
-                                <i class="bi bi-123"></i> Число
+                                <i class="bi bi-123"></i> @lang('Formbuild::field_types.number')
                             </div>
                             <div class="field-type" draggable="true" data-type="textarea">
-                                <i class="bi bi-text-paragraph"></i> Текстовая область
+                                <i class="bi bi-text-paragraph"></i> @lang('Formbuild::field_types.textarea')
                             </div>
                             <div class="field-type" draggable="true" data-type="select">
-                                <i class="bi bi-menu-button"></i> Выпадающий список
+                                <i class="bi bi-menu-button"></i> @lang('Formbuild::field_types.select')
                             </div>
                             <div class="field-type" draggable="true" data-type="checkbox">
-                                <i class="bi bi-check-square"></i> Чекбокс
+                                <i class="bi bi-check-square"></i> @lang('Formbuild::field_types.checkbox')
                             </div>
                             <div class="field-type" draggable="true" data-type="radio">
-                                <i class="bi bi-ui-radios"></i> Радиокнопки
+                                <i class="bi bi-ui-radios"></i> @lang('Formbuild::field_types.radio')
                             </div>
                             <div class="field-type" draggable="true" data-type="file">
-                                <i class="bi bi-file-earmark-arrow-up"></i> Файл
+                                <i class="bi bi-file-earmark-arrow-up"></i> @lang('Formbuild::field_types.file')
                             </div>
                             <div class="field-type" draggable="true" data-type="hidden">
-                                <i class="bi bi-eye-slash"></i> Скрытое поле
+                                <i class="bi bi-eye-slash"></i> @lang('Formbuild::field_types.hidden')
                             </div>
                             <div class="field-type" draggable="true" data-type="date">
-                                <i class="bi bi-calendar"></i> Дата
+                                <i class="bi bi-calendar"></i> @lang('Formbuild::field_types.date')
                             </div>
                         </div>
                     </div>
@@ -79,10 +79,10 @@
                             <div id="formFields">
                                 <div class="empty-state" id="emptyState">
                                     <i class="bi bi-input-cursor-text"></i>
-                                    <h4>Нет полей в форме</h4>
-                                    <p>Перетащите сюда поля из панели выше или нажмите "Добавить поле"</p>
+                                    <h4>@lang('Formbuild::form.no_fields_title')</h4>
+                                    <p>@lang('Formbuild::form.no_fields_description')</p>
                                     <button class="btn btn-primary" onclick="addField()">
-                                        <i class="bi bi-plus-circle fs-6"></i> Добавить поле
+                                        <i class="bi bi-plus-circle fs-6"></i> @lang('Formbuild::form.add_field')
                                     </button>
                                 </div>
                             </div>
@@ -92,19 +92,19 @@
                 
                 <div class="card">
                     <div class="card-header">
-                        <i class="bi bi-gear"></i> Настройки формы
+                        <i class="bi bi-gear"></i> @lang('Formbuild::form.form_settings')
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">ID формы</label>
+                                    <label class="form-label">@lang('Formbuild::form.form_id')</label>
                                     <input type="text" class="form-control" id="formId" value="myForm">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Метод отправки</label>
+                                    <label class="form-label">@lang('Formbuild::form.method')</label>
                                     <div class="custom-select">
                                         <div class="custom-select__selected" id="formMethodSelected">
                                             POST
@@ -122,24 +122,24 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Действие формы (action)</label>
+                            <label class="form-label">@lang('Formbuild::form.action')</label>
                             <input type="text" class="form-control" id="formAction" value="">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Почта куда приходят письма</label>
+                            <label class="form-label">@lang('Formbuild::form.email')</label>
                             <input type="text" class="form-control" id="formEmail" value="">
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" class="form-check-input" id="formMultipart">
-                                    <label class="form-check-label" for="formMultipart">Форма содержит файловые поля (multipart)</label>
+                                    <label class="form-check-label" for="formMultipart">@lang('Formbuild::form.multipart')</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" class="form-check-input" id="formSender">
-                                    <label class="form-check-label" for="formSender">Форма отправляется без перезагрузки</label>
+                                    <label class="form-check-label" for="formSender">@lang('Formbuild::form.ajax_send')</label>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +150,7 @@
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
-                        <i class="bi bi-code-slash"></i> Результат
+                        <i class="bi bi-code-slash"></i> @lang('Formbuild::form.result')
                     </div>
                     <div class="card-body">
                         <ul class="nav nav-tabs" id="outputTabs" role="tablist">
@@ -161,25 +161,25 @@
                                 <button class="nav-link" id="formlister-tab" data-bs-toggle="tab" data-bs-target="#formlister-tab-pane" type="button" role="tab">FormLister/Sender</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-tab-pane" type="button" role="tab">Превью</button>
+                                <button class="nav-link" id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview-tab-pane" type="button" role="tab">@lang('Formbuild::form.preview')</button>
                             </li>
                         </ul>
                         <div class="tab-content" id="outputTabsContent">
                             <div class="tab-pane fade show active" id="html-tab-pane" role="tabpanel" aria-labelledby="html-tab">
                                 <div class="position-relative">
                                     <div id="outputHtml" class="output-code">...</div>
-                                    <i class="bi bi-clipboard copy-btn" title="Копировать" data-bs-toggle="tooltip" onclick="copyToClipboard('outputHtml')"></i>
+                                    <i class="bi bi-clipboard copy-btn" title="@lang('Formbuild::form.copy')" data-bs-toggle="tooltip" onclick="copyToClipboard('outputHtml')"></i>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="formlister-tab-pane" role="tabpanel" aria-labelledby="formlister-tab">
                                 <div class="position-relative">
-                                    <div id="outputParams" class="output-code">Параметры FormLister появятся здесь после генерации</div>
-                                    <i class="bi bi-clipboard copy-btn" title="Копировать" onclick="copyToClipboard('outputParams')"></i>
+                                    <div id="outputParams" class="output-code">@lang('Formbuild::form.params_placeholder')</div>
+                                    <i class="bi bi-clipboard copy-btn" title="@lang('Formbuild::form.copy')" onclick="copyToClipboard('outputParams')"></i>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="preview-tab-pane" role="tabpanel" aria-labelledby="preview-tab">
                                 <div class="form-preview" id="formPreview">
-                                    Превью формы будет отображено здесь
+                                    @lang('Formbuild::form.preview_placeholder')
                                 </div>
                             </div>
                         </div>
@@ -188,20 +188,20 @@
                 
                 <div class="card mt-4">
                     <div class="card-header">
-                        <i class="bi bi-lightbulb"></i> Советы
+                        <i class="bi bi-lightbulb"></i> @lang('Formbuild::form.tips')
                     </div>
                     <div class="card-body">
                         <div class="alert alert-info">
-                            <h6><i class="bi bi-info-circle"></i> Подсказки по FormLister:</h6>
+                            <h6><i class="bi bi-info-circle"></i> @lang('Formbuild::form.tips_title'):</h6>
                             <ul>
-                                <li>Для файловых полей не забудьте включить multipart</li>
-                                <li>Используйте уникальные имена для полей формы</li>
-                                <li><strong>Для отправки форм без перезагрузки используйте FormSender</strong></li>
-                                <li>Для сложных правил валидации редактируйте параметры вручную</li>
+                                <li>@lang('Formbuild::form.tip_multipart')</li>
+                                <li>@lang('Formbuild::form.tip_unique_names')</li>
+                                <li><strong>@lang('Formbuild::form.tip_ajax_send')</strong></li>
+                                <li>@lang('Formbuild::form.tip_validation_rules')</li>
                             </ul>
                         </div>
                         <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#helpModal">
-                            <i class="bi bi-question-circle"></i> Помощь
+                            <i class="bi bi-question-circle"></i> @lang('Formbuild::form.help')
                         </button>
                     </div>
                 </div>
@@ -214,15 +214,15 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="fieldSettingsModalLabel">Настройки поля</h5>
+                    <h5 class="modal-title" id="fieldSettingsModalLabel">@lang('Formbuild::form.field_settings')</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="fieldSettingsModalBody">
                     <!-- Динамическое содержимое -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-primary" onclick="saveFieldSettings()">Сохранить</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('Formbuild::form.close')</button>
+                    <button type="button" class="btn btn-primary" onclick="saveFieldSettings()">@lang('Formbuild::form.save')</button>
                 </div>
             </div>
         </div>
@@ -233,38 +233,38 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="helpModalLabel"><i class="bi bi-question-circle"></i> Помощь по генератору форм</h5>
+                    <h5 class="modal-title" id="helpModalLabel"><i class="bi bi-question-circle"></i> @lang('Formbuild::form.help_title')</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <h6>Как использовать генератор:</h6>
+                    <h6>@lang('Formbuild::form.how_to_use'):</h6>
                     <ol>
-                        <li>Добавьте нужные поля формы с помощью кнопки "Добавить поле"</li>
-                        <li>Настройте каждое поле, указав тип, название и параметры</li>
-                        <li>Укажите общие настройки формы в нижней панели</li>
-                        <li>Нажмите "Сгенерировать" для получения кода</li>
-                        <li>Скопируйте HTML-код и параметры FormLister</li>
+                        <li>@lang('Formbuild::form.step1')</li>
+                        <li>@lang('Formbuild::form.step2')</li>
+                        <li>@lang('Formbuild::form.step3')</li>
+                        <li>@lang('Formbuild::form.step4')</li>
+                        <li>@lang('Formbuild::form.step5')</li>
                     </ol>
                     
-                    <h6 class="mt-4">Особенности:</h6>
+                    <h6 class="mt-4">@lang('Formbuild::form.features'):</h6>
                     <ul>
-                        <li>Поддержка всех основных типов полей</li>
-                        <li>Автоматическая генерация правил валидации</li>
-                        <li>Превью формы в реальном времени</li>
-                        <li>Копирование кода в один клик</li>
+                        <li>@lang('Formbuild::form.feature1')</li>
+                        <li>@lang('Formbuild::form.feature2')</li>
+                        <li>@lang('Formbuild::form.feature3')</li>
+                        <li>@lang('Formbuild::form.feature4')</li>
                     </ul>
                     
                     <div class="alert alert-warning mt-4">
-                        <i class="bi bi-exclamation-triangle"></i> Для работы форм с файлами не забудьте:
+                        <i class="bi bi-exclamation-triangle"></i> @lang('Formbuild::form.file_warning'):
                         <ul>
-                            <li>Указать атрибут enctype="multipart/form-data"</li>
-                            <li>Настроить параметры загрузки файлов в FormLister</li>
-                            <li>Проверить права на запись в папку uploads</li>
+                            <li>@lang('Formbuild::form.file_warning1')</li>
+                            <li>@lang('Formbuild::form.file_warning2')</li>
+                            <li>@lang('Formbuild::form.file_warning3')</li>
                         </ul>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Понятно</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">@lang('Formbuild::form.understand')</button>
                 </div>
             </div>
         </div>
@@ -276,16 +276,16 @@
             <div class="d-flex justify-content-between align-items-start mb-2">
                 <h5 class="mb-0 d-flex align-items-center">
                     <i class="bi bi-grip-vertical me-2 drag-handle" style="cursor: move;"></i>
-                    <span class="field-title">Поле #{number}</span>
+                    <span class="field-title">@lang('Formbuild::form.field') #{number}</span>
                     <span class="badge bg-primary ms-2 field-type-badge">text</span>
-                    <span class="badge badge-required ms-1 field-required-badge d-none">обязательное</span>
+                    <span class="badge badge-required ms-1 field-required-badge d-none">@lang('Formbuild::form.required')</span>
                 </h5>
                 <div>
-                    <button class="btn btn-sm btn-outline-secondary me-1" onclick="editFieldSettings({id})" data-bs-toggle="tooltip" title="Настройки">
+                    <button class="btn btn-sm btn-outline-secondary me-1" onclick="editFieldSettings({id})" data-bs-toggle="tooltip" title="@lang('Formbuild::form.settings')">
                         <i class="bi bi-gear"></i>
                     </button>
                     <button class="btn btn-sm btn-outline-danger" onclick="removeField({id})" 
-                            data-bs-toggle="tooltip" title="Удалить"
+                            data-bs-toggle="tooltip" title="@lang('Formbuild::form.delete')"
                             onmouseleave="hideTooltip(this)">
                         <i class="bi bi-trash"></i>
                     </button>
@@ -293,8 +293,8 @@
             </div>
             
             <div class="field-summary">
-                <div><strong>Имя:</strong> <span class="field-name-summary">field{id}</span></div>
-                <div><strong>Название:</strong> <span class="field-label-summary">Поле #{number}</span></div>
+                <div><strong>@lang('Formbuild::form.name'):</strong> <span class="field-name-summary">field{id}</span></div>
+                <div><strong>@lang('Formbuild::form.label'):</strong> <span class="field-label-summary">@lang('Formbuild::form.field') #{number}</span></div>
             </div>
             
             <div class="field-options d-none" id="field-options-{id}">
