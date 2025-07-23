@@ -20,5 +20,6 @@ class FormbuildServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/../views', $this->namespace);
         $this->loadTranslationsFrom(__DIR__ . '/../lang', $this->namespace);
+        $this->loadMigrationsFrom(__DIR__ . '/../resources/migrations');
     }
 }
