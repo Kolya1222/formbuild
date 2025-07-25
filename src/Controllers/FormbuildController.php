@@ -15,26 +15,33 @@ class FormbuildController
     {
         $this->module = $module;
 
+        // Делаем модуль доступным для всех представлений
         View::share([
             'module' => $module,
         ]);
     }
 
+    // Главная страница
     public function index(Request $request)
     {
         return response()->view('Formbuild::index');
     }
+
+    // Генерация файла формы
     public function generateFormFile(Request $request)
     {
         try {
             $data = $request;
 
+            // Путь для сохранения файла формы
             $path = MODX_BASE_PATH . "core/custom/forms/{$data['formId']}.php";
             
+            // Создаем директорию, если она не существует
             if (!file_exists(dirname($path))) {
                 mkdir(dirname($path), 0755, true);
             }
 
+            // Сохраняем содержимое формы в файл
             file_put_contents($path, $data['content']);
             
             return response()->json([
@@ -49,6 +56,8 @@ class FormbuildController
             ], 500);
         }
     }
+
+    // Сохранение формы
     public function saveForm(Request $request)
     {
         try {
@@ -67,29 +76,29 @@ class FormbuildController
                 'updated_at' => now()
             ];
 
-            // Проверка, что JSON корректно сформирован
+            // Проверка корректности JSON
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \RuntimeException('Invalid JSON data: ' . json_last_error_msg());
+                throw new \RuntimeException('Неверные данные JSON: ' . json_last_error_msg());
             }
 
-            // Сохраняем в базу данных
+            // Сохранение в базу данных
             $id = DB::table('form_build_items')->insertGetId($data);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Form saved successfully',
+                'message' => 'Форма успешно сохранена',
                 'id' => $id
             ]);
             
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error saving form: ' . $e->getMessage(),
-                'trace' => $e->getTraceAsString() // Только для разработки!
+                'message' => 'Ошибка при сохранении формы: ' . $e->getMessage(),
             ], 500);
         }
     }
 
+    // Получение сохраненных форм
     public function getSavedForms()
     {
         try {
@@ -104,11 +113,12 @@ class FormbuildController
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error loading forms: ' . $e->getMessage()
+                'message' => 'Ошибка при загрузке форм: ' . $e->getMessage()
             ], 500);
         }
     }
 
+    // Получение конкретной формы
     public function getForm(Request $request)
     {
         try {
@@ -119,7 +129,7 @@ class FormbuildController
             if (!$form) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Form not found'
+                    'message' => 'Форма не найдена'
                 ], 404);
             }
 
@@ -135,11 +145,12 @@ class FormbuildController
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error loading form: ' . $e->getMessage()
+                'message' => 'Ошибка при загрузке формы: ' . $e->getMessage()
             ], 500);
         }
     }
 
+    // Удаление формы
     public function deleteForm(Request $request)
     {
         try {
@@ -149,12 +160,12 @@ class FormbuildController
 
             return response()->json([
                 'success' => (bool)$deleted,
-                'message' => $deleted ? 'Form deleted successfully' : 'Form not found'
+                'message' => $deleted ? 'Форма успешно удалена' : 'Форма не найдена'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error deleting form: ' . $e->getMessage()
+                'message' => 'Ошибка при удалении формы: ' . $e->getMessage()
             ], 500);
         }
     }
