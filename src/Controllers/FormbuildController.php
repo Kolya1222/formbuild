@@ -6,7 +6,6 @@ use Kolya1222\Formbuild\Services\{Module};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\DB;
-//use EvolutionCMS\Models\SiteModule;
 
 class FormbuildController
 {
@@ -53,29 +52,40 @@ class FormbuildController
     public function saveForm(Request $request)
     {
         try {
+            // Валидация входных данных
+            $validated = $request;
+
+            // Подготовка данных для сохранения
             $data = [
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
                 'form_data' => json_encode([
-                    'fields' => $request->input('fields'),
-                    'settings' => $request->input('settings')
+                    'fields' => $validated['fields'],
+                    'settings' => $validated['settings']
                 ]),
                 'created_at' => now(),
                 'updated_at' => now()
             ];
 
+            // Проверка, что JSON корректно сформирован
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \RuntimeException('Invalid JSON data: ' . json_last_error_msg());
+            }
+
             // Сохраняем в базу данных
-            $id = DB::table('form_builder_forms')->insertGetId($data);
+            $id = DB::table('form_build_items')->insertGetId($data);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Form saved successfully',
                 'id' => $id
             ]);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error saving form: ' . $e->getMessage()
+                'message' => 'Error saving form: ' . $e->getMessage(),
+                'trace' => $e->getTraceAsString() // Только для разработки!
             ], 500);
         }
     }
@@ -83,7 +93,7 @@ class FormbuildController
     public function getSavedForms()
     {
         try {
-            $forms = DB::table('form_builder_forms')
+            $forms = DB::table('form_build_items')
                 ->orderBy('created_at', 'desc')
                 ->get(['id', 'name', 'description', 'created_at']);
 
@@ -102,7 +112,7 @@ class FormbuildController
     public function getForm(Request $request)
     {
         try {
-            $form = DB::table('form_builder_forms')
+            $form = DB::table('form_build_items')
                 ->where('id', $request->input('id'))
                 ->first();
 
@@ -133,7 +143,7 @@ class FormbuildController
     public function deleteForm(Request $request)
     {
         try {
-            $deleted = DB::table('form_builder_forms')
+            $deleted = DB::table('form_build_items')
                 ->where('id', $request->input('id'))
                 ->delete();
 

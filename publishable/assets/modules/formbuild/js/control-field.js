@@ -1,4 +1,20 @@
-let fieldCount = 0;
+// Экспортируемая переменная счетчика полей
+export let fieldCount = window.fieldCount || 0;
+
+// Функция для получения текущего значения счетчика
+export function getFieldCount() {
+    return fieldCount;
+}
+
+// Функция для установки значения счетчика
+export function setFieldCount(value) {
+    fieldCount = value;
+}
+
+// Функция для инкремента счетчика
+export function incrementFieldCount() {
+    return fieldCount++;
+}
 
 // Общая функция для скрытия tooltip
 export function hideTooltip(element) {
@@ -17,11 +33,10 @@ export function initTooltips(context = document) {
 }
 
 // Общая функция для создания нового поля
-function createNewField(id) {
+export function createNewField(id) {
     const formFields = document.getElementById('formFields');
     const emptyState = document.getElementById('emptyState');
     
-    // Исправлено: теперь это присваивание, а не сравнение
     if (emptyState) emptyState.style.display = 'none';
     
     const newField = document.createElement('div');
@@ -31,7 +46,6 @@ function createNewField(id) {
     
     formFields.appendChild(newField);
     
-    // Добавляем обработчики drag and drop
     const fieldElement = newField.querySelector('.form-field');
     fieldElement.addEventListener('dragend', function() {
         this.classList.remove('dragging');
@@ -48,28 +62,35 @@ function createNewField(id) {
 export function addField() {
     createNewField(fieldCount);
     editFieldSettings(fieldCount);
-    fieldCount++;
+    incrementFieldCount();
 }
 
 // Удаление поля
 export function removeField(id) {
-    // Скрываем tooltip кнопки удаления
-    const button = document.querySelector(`#field-${id} [onclick*="removeField(${id})"]`);
-    hideTooltip(button);
-
-    document.querySelector(`#field-${id}`)?.parentNode?.remove();
-
-    // Проверяем наличие полей
+    const fieldContainer = document.querySelector(`#field-${id}`)?.parentNode;
+    const removeButton = document.querySelector(`#field-${id} [onclick*="removeField(${id})"]`);
+    
+    if (removeButton) {
+        const tooltip = bootstrap.Tooltip.getInstance(removeButton);
+        tooltip?.hide();
+    }
+    
+    if (fieldContainer) {
+        fieldContainer.remove();
+    }
+    
     const hasFields = document.querySelectorAll('#formFields > div > .form-field').length > 0;
-    if (!hasFields) {
-        document.getElementById('emptyState').style.display = 'block';
+    const emptyState = document.getElementById('emptyState');
+    
+    if (emptyState) {
+        emptyState.style.display = hasFields ? 'none' : 'block';
     }
     
     generateMarkup();
 }
 
 // Типы полей и их настройки
-const FIELD_TYPES = {
+export const FIELD_TYPES = {
     text: { label: 'Текстовое поле', name: 'text_' },
     email: { label: 'Email', name: 'email' },
     tel: { label: 'Телефон', name: 'phone' },
@@ -102,7 +123,7 @@ const FIELD_TYPES = {
 
 // Функция для добавления поля определенного типа
 export function addFieldByType(type) {
-    const fieldId = fieldCount++;
+    const fieldId = getFieldCount();
     const fieldElement = createNewField(fieldId);
     
     if (!fieldElement) return;
@@ -110,17 +131,15 @@ export function addFieldByType(type) {
     const typeConfig = FIELD_TYPES[type] || FIELD_TYPES.text;
     const name = typeConfig.name + (type === 'text' ? fieldId : '');
     
-    // Устанавливаем атрибуты поля
     fieldElement.dataset.type = type;
     if (typeConfig.options) fieldElement.dataset.options = typeConfig.options;
     if (typeConfig.value) fieldElement.dataset.value = typeConfig.value;
     
-    // Обновляем отображение поля
     fieldElement.querySelector('.field-title').textContent = typeConfig.label;
     fieldElement.querySelector('.field-type-badge').textContent = type;
     fieldElement.querySelector('.field-name-summary').textContent = name;
     fieldElement.querySelector('.field-label-summary').textContent = typeConfig.label;
     
-    // Открываем настройки
     editFieldSettings(fieldId);
+    incrementFieldCount();
 }

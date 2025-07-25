@@ -1,8 +1,11 @@
 import { initDragAndDropSystem } from './drag-drop.js';
 import { generateMarkup } from './render-form.js';
 import { editFieldSettings, updateFieldSettingsForm, saveFieldSettings } from './FormSettings.js';
-import { hideTooltip, addField, removeField, addFieldByType, initTooltips } from './control-field.js';
-import {confirmFileGeneration} from './file-generation.js'
+import { hideTooltip, addField, removeField, addFieldByType, initTooltips, createNewField, FIELD_TYPES } from './control-field.js';
+import { confirmFileGeneration } from './file-generation.js';
+import { saveForm, confirmSaveForm } from './save-form.js';
+import { loadForm, loadSavedForm, deleteSavedForm } from './load-form.js';
+import { initFormTabs } from './form-utils.js';
 
 // Делаем функции глобальными для доступа из HTML
 const GLOBAL_FUNCTIONS = {
@@ -15,7 +18,14 @@ const GLOBAL_FUNCTIONS = {
     addField,
     hideTooltip,
     generateMarkup,
-    confirmFileGeneration
+    confirmFileGeneration,
+    createNewField,
+    FIELD_TYPES,
+    saveForm,
+    confirmSaveForm,
+    loadForm,
+    loadSavedForm,
+    deleteSavedForm 
 };
 
 Object.entries(GLOBAL_FUNCTIONS).forEach(([name, fn]) => {
@@ -28,6 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Инициализация drag-and-drop
     initDragAndDropSystem();
+    
+    // Инициализация табов формы
+    initFormTabs();
+    
     // Добавляем обработку кнопки генерации файла
     const formSenderCheckbox = document.getElementById('formSender');
     const generateFileButton = document.getElementById('generateFileButton');
@@ -42,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('Элементы formSender или generateFileButton не найдены!');
     }
+    
     const customSelects = document.querySelectorAll('.custom-select');
     
     customSelects.forEach(select => {

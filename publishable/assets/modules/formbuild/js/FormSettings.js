@@ -66,22 +66,65 @@ export function editFieldSettings(id) {
     `;
     
     document.getElementById('fieldSettingsModalBody').innerHTML = modalContent;
+    // Устанавливаем основные значения
+    safeSetValue(`fieldType-${id}`, field.dataset.type);
+    safeSetValue(`fieldLabel-${id}`, field.dataset.label);
+    safeSetValue(`fieldName-${id}`, field.dataset.name);
+    safeSetValue(`fieldId-${id}`, field.dataset.id); // Обратите внимание - используем data-id
+    safeSetChecked(`fieldRequired-${id}`, field.dataset.required === 'true');
+    safeSetValue(`fieldPlaceholder-${id}`, field.dataset.placeholder);
+    safeSetValue(`fieldMinLength-${id}`, field.dataset.minLength);
+    safeSetValue(`fieldMaxLength-${id}`, field.dataset.maxLength);
     
-    if (field) {
-        const type = document.getElementById(`fieldType-${id}`).value;
-        document.getElementById(`fieldType-${id}`).value = field.dataset.type || 'text';
-        document.getElementById(`fieldLabel-${id}`).value = field.dataset.label || '';
-        document.getElementById(`fieldName-${id}`).value = field.dataset.name || `field${id}`;
-        document.getElementById(`fieldRequired-${id}`).checked = field.dataset.required === 'true';
-        document.getElementById(`fieldPlaceholder-${id}`).value = field.dataset.placeholder || '';
-        document.getElementById(`fieldMinLength-${id}`).value = field.dataset.minLength || '';
-        document.getElementById(`fieldMaxLength-${id}`).value = field.dataset.maxLength || '';
-        
-        updateFieldSettingsForm(id);
-    }
+    // Обновляем специфические настройки
+    updateFieldSettingsForm(id);
+
+    // Заполняем специфические поля после обновления формы
+    setTimeout(() => fillSpecificFields(id, field), 50);
     
     const modal = new bootstrap.Modal(document.getElementById('fieldSettingsModal'));
     modal.show();
+}
+function safeSetValue(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) element.value = value || '';
+}
+
+function safeSetChecked(elementId, isChecked) {
+    const element = document.getElementById(elementId);
+    if (element) element.checked = isChecked;
+}
+function fillSpecificFields(id, field) {
+    switch(field.dataset.type) {
+        case 'select':
+        case 'radio':
+            safeSetValue(`fieldOptions-${id}`, field.dataset.options);
+            break;
+            
+        case 'checkbox':
+            safeSetValue(`fieldValue-${id}`, field.dataset.value || '1');
+            safeSetChecked(`fieldChecked-${id}`, field.dataset.checked === 'true');
+            break;
+            
+        case 'file':
+            safeSetValue(`fieldAccept-${id}`, field.dataset.accept);
+            safeSetValue(`fieldMaxSize-${id}`, field.dataset.maxSize);
+            break;
+            
+        case 'hidden':
+            safeSetValue(`fieldValue-${id}`, field.dataset.value);
+            break;
+            
+        case 'number':
+            safeSetValue(`fieldMin-${id}`, field.dataset.min);
+            safeSetValue(`fieldMax-${id}`, field.dataset.max);
+            safeSetValue(`fieldStep-${id}`, field.dataset.step || '1');
+            break;
+            
+        case 'textarea':
+            safeSetValue(`fieldRows-${id}`, field.dataset.rows || '3');
+            break;
+    }
 }
 // Обновление формы настроек в зависимости от типа поля
 export function updateFieldSettingsForm(id) {

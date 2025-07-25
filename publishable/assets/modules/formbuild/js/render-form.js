@@ -1,3 +1,4 @@
+import { showToast } from './form-utils.js';
 export function generateMarkup() {
     try {
         const fields = document.querySelectorAll('.form-field');
@@ -40,10 +41,6 @@ export function generateMarkup() {
         let fileFields = [];
 
         fields.forEach((field, index) => {
-            if (!field.dataset.name && !field.dataset.label && !field.dataset.type) {
-                console.warn('Пропущено поле без name, label и type', field);
-                return;
-            }
             
             const type = field.dataset.type || 'text';
             const label = field.dataset.label || `Поле ${index + 1}`;
@@ -321,7 +318,6 @@ export function generateMarkup() {
         addPreviewFormHandler();
         showGenerationSuccess();
     } catch (error) {
-        console.error('Ошибка генерации формы:', error);
         showGenerationError(error);
     }
 }
@@ -380,26 +376,20 @@ export function addPreviewFormHandler() {
         });
     });
 }
-function showGenerationSuccess() {
-    // Ваш код для показа успешной генерации
-    const notification = createNotification('Форма успешно сгенерирована!', 'success');
-    document.body.appendChild(notification);
+export function showGenerationSuccess() {
+    showToast('Форма успешно сгенерирована!', 'success', {
+        position: 'top-center',
+        delay: 2000
+    });
     highlightOutputBlocks();
-    setTimeout(() => notification.remove(), 3000);
 }
 
-function showGenerationError(error) {
+export function showGenerationError(error) {
     const errorMessage = error instanceof Error ? error.message : 'Произошла неизвестная ошибка';
-    const notification = createNotification(`Ошибка: ${errorMessage}`, 'danger');
-    document.body.appendChild(notification);
-    setTimeout(() => notification.remove(), 5000);
-}
-
-function createNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `notification alert alert-${type}`;
-    notification.textContent = message;
-    return notification;
+    showToast(`Ошибка: ${errorMessage}`, 'danger', {
+        position: 'top-center',
+        delay: 5000
+    });
 }
 
 function highlightOutputBlocks() {

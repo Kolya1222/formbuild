@@ -1,21 +1,16 @@
 export function initDragAndDropSystem() {
-    // 1. Инициализация перетаскивания ТИПОВ полей (из палитры в рабочую область)
     const fieldTypes = document.querySelectorAll('.field-type');
     const formFields = document.getElementById('formFields');
     const emptyState = document.getElementById('emptyState');
     
-    // Добавляем визуальный стиль для области перетаскивания
-    formFields.style.minHeight = '200px';
-    formFields.style.transition = 'all 0.3s ease';
-    
+    // 1. Инициализация перетаскивания ТИПОВ полей
     fieldTypes.forEach(type => {
         type.setAttribute('draggable', 'true');
+        
         type.addEventListener('dragstart', function(e) {
             e.dataTransfer.setData('action', 'add-new-field');
             e.dataTransfer.setData('field-type', this.dataset.type);
             this.classList.add('dragging');
-            
-            // Добавляем класс для всей формы при начале перетаскивания
             formFields.classList.add('drag-active');
             if (emptyState) emptyState.classList.add('drag-active');
         });
@@ -27,18 +22,18 @@ export function initDragAndDropSystem() {
         });
     });
 
-    // 2. Инициализация перетаскивания СУЩЕСТВУЮЩИХ полей (внутри рабочей области)
-    let draggedField = null;
+    // 2. Инициализация перетаскивания существующих полей
+    let draggedFieldContainer = null;
 
-    // Обработчики для существующих полей формы
     formFields.addEventListener('dragstart', function(e) {
-        if (e.target.classList.contains('form-field')) {
-            draggedField = e.target;
+        const fieldElement = e.target.closest('.form-field');
+        if (fieldElement) {
+            // Запоминаем родительский контейнер поля (div, в котором лежит .form-field)
+            draggedFieldContainer = fieldElement.parentNode;
             e.dataTransfer.setData('action', 'reorder-fields');
-            e.dataTransfer.setData('field-id', draggedField.id);
-            draggedField.classList.add('dragging');
+            e.dataTransfer.setData('field-id', fieldElement.id);
+            fieldElement.classList.add('dragging');
             
-            // Добавляем индикатор для всех полей
             document.querySelectorAll('.form-field').forEach(f => {
                 f.classList.add('reorder-mode');
             });
@@ -46,39 +41,38 @@ export function initDragAndDropSystem() {
     }, true);
 
     formFields.addEventListener('dragend', function(e) {
-        if (e.target.classList.contains('form-field')) {
-            e.target.classList.remove('dragging');
+        const fieldElement = e.target.closest('.form-field');
+        if (fieldElement) {
+            fieldElement.classList.remove('dragging');
             document.querySelectorAll('.form-field').forEach(f => {
                 f.style.borderTop = '';
+                f.style.borderBottom = '';
                 f.classList.remove('reorder-mode');
             });
         }
+        draggedFieldContainer = null;
     }, true);
 
-    // Общие обработчики для области формы
     formFields.addEventListener('dragover', function(e) {
         e.preventDefault();
         
         if (e.dataTransfer.types.includes('field-type')) {
             e.dataTransfer.dropEffect = 'copy';
-            // Визуальный эффект при перетаскивании нового поля
             formFields.classList.add('drag-over-new');
             if (emptyState) emptyState.classList.add('drag-over-new');
         } else if (e.dataTransfer.types.includes('field-id')) {
             e.dataTransfer.dropEffect = 'move';
             
             const field = e.target.closest('.form-field');
-            if (field && field !== draggedField) {
+            if (field && field.id !== e.dataTransfer.getData('field-id')) {
                 const rect = field.getBoundingClientRect();
                 const middle = rect.top + rect.height / 2;
                 
-                // Убираем предыдущие индикаторы
                 document.querySelectorAll('.form-field').forEach(f => {
                     f.style.borderTop = '';
                     f.style.borderBottom = '';
                 });
                 
-                // Добавляем индикатор в зависимости от позиции
                 if (e.clientY < middle) {
                     field.style.borderTop = '2px dashed var(--primary)';
                 } else {
@@ -103,11 +97,13 @@ export function initDragAndDropSystem() {
         e.preventDefault();
         e.stopPropagation();
         
-        // Убираем все визуальные эффекты
+        // Очистка стилей
         document.querySelectorAll('.form-field').forEach(f => {
             f.style.borderTop = '';
             f.style.borderBottom = '';
+            f.classList.remove('reorder-mode');
         });
+        
         formFields.classList.remove('drag-active', 'drag-over-new');
         if (emptyState) emptyState.classList.remove('drag-active', 'drag-over-new');
 
@@ -117,36 +113,72 @@ export function initDragAndDropSystem() {
             const fieldType = e.dataTransfer.getData('field-type');
             if (fieldType) {
                 addFieldByType(fieldType);
-                // Скрываем пустое состояние после добавления первого поля
                 if (emptyState) emptyState.style.display = 'none';
             }
         } else if (action === 'reorder-fields') {
             const fieldId = e.dataTransfer.getData('field-id');
             const draggedElement = document.getElementById(fieldId);
+            
+            if (!draggedElement || !draggedFieldContainer) return;
+            
             const dropTarget = e.target.closest('.form-field');
             
-            if (draggedElement && dropTarget && draggedElement !== dropTarget) {
+            if (!dropTarget) {
+                // Перетащили в пустую область - добавляем в конец
+                formFields.appendChild(draggedFieldContainer);
+            } else if (draggedElement !== dropTarget) {
                 const rect = dropTarget.getBoundingClientRect();
                 const middle = rect.top + rect.height / 2;
+                const dropTargetContainer = dropTarget.parentNode;
                 
-                if (e.clientY < middle) {
-                    dropTarget.parentNode.insertBefore(draggedElement, dropTarget);
+                // Убедимся, что оба элемента имеют общего родителя
+                if (draggedFieldContainer.parentNode === dropTargetContainer.parentNode) {
+                    if (e.clientY < middle) {
+                        dropTargetContainer.parentNode.insertBefore(
+                            draggedFieldContainer, 
+                            dropTargetContainer
+                        );
+                    } else {
+                        dropTargetContainer.parentNode.insertBefore(
+                            draggedFieldContainer, 
+                            dropTargetContainer.nextSibling
+                        );
+                    }
                 } else {
-                    dropTarget.parentNode.insertBefore(draggedElement, dropTarget.nextSibling);
+                    // Если родители разные, просто добавляем в конец
+                    formFields.appendChild(draggedFieldContainer);
                 }
-                
-                // Обновляем порядок полей в данных
-                updateFieldsOrder();
+            }
+            
+            // Обновляем порядок без изменения ID
+            updateFieldsPositions();
+        }
+    });
+}
+
+// Обновляем только позиции без изменения ID
+function updateFieldsPositions() {
+    const fieldsContainer = document.getElementById('formFields');
+    const fieldContainers = Array.from(fieldsContainer.querySelectorAll('div:has(.form-field)'));
+    
+    fieldContainers.forEach((container, index) => {
+        const field = container.querySelector('.form-field');
+        if (field) {
+            field.dataset.position = index;
+            
+            // Обновляем обработчики с учетом текущего ID
+            const id = field.id.replace('field-', '');
+            const editButton = field.querySelector('[onclick*="editFieldSettings"]');
+            const removeButton = field.querySelector('[onclick*="removeField"]');
+            
+            if (editButton) {
+                editButton.setAttribute('onclick', `editFieldSettings(${id})`);
+            }
+            if (removeButton) {
+                removeButton.setAttribute('onclick', `removeField(${id})`);
             }
         }
     });
     
-    // Функция для обновления порядка полей
-    function updateFieldsOrder() {
-        const fieldsContainer = document.getElementById('formFields');
-        const fields = Array.from(fieldsContainer.querySelectorAll('.form-field'));
-        
-        // Здесь можно обновить порядок полей в вашем состоянии/массиве
-        console.log('Порядок полей обновлен:', fields.map(f => f.id));
-    }
+    generateMarkup();
 }
