@@ -1,4 +1,4 @@
-# FormBuilder для FormLister/Sender
+# FormBuildevo для FormLister/Sender
 
 Модуль для формирования форм и запросов к FormLister/Sender, призванный частично автоматизировать формирование параметров для FormLister.
 
