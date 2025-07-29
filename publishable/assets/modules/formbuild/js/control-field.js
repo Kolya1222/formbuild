@@ -123,6 +123,11 @@ export const FIELD_TYPES = {
 
 // Функция для добавления поля определенного типа
 export function addFieldByType(type) {
+    // Проверяем, не открыто ли уже модальное окно
+    if (document.querySelector('.modal.show')) {
+        return; // Не создаем новое поле, если уже открыто какое-то модальное окно
+    }
+
     const fieldId = getFieldCount();
     const fieldElement = createNewField(fieldId);
     

@@ -1,8 +1,12 @@
-import { csrfToken, showToast, getRoutes } from './form-utils.js';
+import { csrfToken, showToast, getRoutes, openSaveLoadModal  } from './form-utils.js';
 import { getAllFieldsData, getFormSettings } from './form-data.js';
 
 // Сохранение формы
 export function saveForm() {
+    openSaveLoadModal('save-tab');
+    if (document.querySelector('#saveLoadModal.show')) {
+        return;
+    }
     const modal = document.getElementById('saveLoadModal');
     const saveTab = document.querySelector('#save-tab');
     const bootstrapModal = new bootstrap.Modal(modal);
@@ -39,7 +43,7 @@ export function confirmSaveForm() {
     const ROUTES = getRoutes();
     const formName = document.getElementById('formName').value.trim();
     if (!formName) {
-        alert('Form name is required');
+        alert('Укажите название формы.');
         return;
     }
 

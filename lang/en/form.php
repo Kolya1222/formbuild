@@ -45,7 +45,7 @@ return [
     'file_warning' => 'For file upload forms remember to:',
     'file_warning1' => 'Add enctype="multipart/form-data" attribute',
     'file_warning2' => 'Configure file upload parameters in FormLister',
-    'file_warning3' => 'Check write permissions for uploads folder',
+    'file_warning3' => 'Check write permissions for /core/custom/forms folder',
     'understand' => 'Got it',
     'field' => 'Field',
     'required' => 'required',

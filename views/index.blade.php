@@ -1,16 +1,16 @@
 @extends('Formbuild::layout')
 
 @section('buttons')
-<div id="actions" style="position: fixed; right: 0; display: flex; justify-content: flex-end;z-index: 1;">
-    <div class="btn-group">
-        <a href="javascript:;" class="btn btn-success" onclick="location.reload();">
-            <i class="fa fa-refresh"></i><span>@lang('Formbuild::global.refresh')</span>
-        </a>
-        <button class="btn btn-primary" onclick="saveForm()">
-            <i class="fa fa-save"></i><span>@lang('Formbuild::form.save_form')</span>
+<div id="actions" class="fixed-actions-panel">
+    <div class="btn-group shadow-sm">
+        <button class="btn btn-outline-secondary" onclick="location.reload();" data-bs-toggle="tooltip" title="@lang('Formbuild::global.refresh')">
+            <i class="bi bi-arrow-clockwise"></i>
         </button>
-        <button class="btn btn-info" onclick="loadForm()">
-            <i class="fa fa-folder-open"></i><span>@lang('Formbuild::form.load_form')</span>
+        <button class="btn btn-primary" onclick="saveForm()" data-bs-toggle="tooltip" title="@lang('Formbuild::form.save_form')">
+            <i class="bi bi-save"></i>
+        </button>
+        <button class="btn btn-outline-primary" onclick="loadForm()" data-bs-toggle="tooltip" title="@lang('Formbuild::form.load_form')">
+            <i class="bi bi-folder2-open"></i>
         </button>
     </div>
 </div>
@@ -99,7 +99,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-header">
                         <i class="bi bi-gear"></i> @lang('Formbuild::form.form_settings')
@@ -274,7 +273,7 @@
                         <li>@lang('Formbuild::form.step5')</li>
                     </ol>
 
-                    <h6 class="mt-4">@lang('Formbuild::form.features'):</h6>
+                    <h6 class="mt-4">@lang('Formbuild::form.features')</h6>
                     <ul>
                         <li>@lang('Formbuild::form.feature1')</li>
                         <li>@lang('Formbuild::form.feature2')</li>
@@ -283,11 +282,31 @@
                     </ul>
 
                     <div class="alert alert-warning mt-4">
-                        <i class="bi bi-exclamation-triangle"></i> @lang('Formbuild::form.file_warning'):
+                        <i class="bi bi-exclamation-triangle"></i> @lang('Formbuild::form.file_warning')
                         <ul>
                             <li>@lang('Formbuild::form.file_warning1')</li>
                             <li>@lang('Formbuild::form.file_warning2')</li>
                             <li>@lang('Formbuild::form.file_warning3')</li>
+                        </ul>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                        <h6><i class="bi bi-keyboard"></i> @lang('Formbuild::global.hotkeys_title')</h6>
+                        <ul class="hotkeys-list">
+                            <li><kbd>Enter</kbd> - @lang('Formbuild::global.hotkeys.generate')</li>
+                            <li><kbd>Ctrl+S</kbd> - @lang('Formbuild::global.hotkeys.save_window')</li>
+                            <li><kbd>Ctrl+O</kbd> - @lang('Formbuild::global.hotkeys.load_window')</li>
+                            <li><kbd>Ctrl+1</kbd> - @lang('Formbuild::global.hotkeys.text_field')</li>
+                            <li><kbd>Ctrl+2</kbd> - @lang('Formbuild::global.hotkeys.email_field')</li>
+                            <li><kbd>Ctrl+3</kbd> - @lang('Formbuild::global.hotkeys.tel_field')</li>
+                            <li><kbd>Ctrl+4</kbd> - @lang('Formbuild::global.hotkeys.password_field')</li>
+                            <li><kbd>Ctrl+5</kbd> - @lang('Formbuild::global.hotkeys.number_field')</li>
+                            <li><kbd>Ctrl+6</kbd> - @lang('Formbuild::global.hotkeys.textarea_field')</li>
+                            <li><kbd>Ctrl+7</kbd> - @lang('Formbuild::global.hotkeys.select_field')</li>
+                            <li><kbd>Ctrl+8</kbd> - @lang('Formbuild::global.hotkeys.checkbox_field')</li>
+                            <li><kbd>Ctrl+9</kbd> - @lang('Formbuild::global.hotkeys.radio_field')</li>
+                            <li><kbd>Ctrl+0</kbd> - @lang('Formbuild::global.hotkeys.file_field')</li>
+                            <li><kbd>Ctrl+-</kbd> - @lang('Formbuild::global.hotkeys.hidden_field')</li>
+                            <li><kbd>Ctrl+=</kbd> - @lang('Formbuild::global.hotkeys.date_field')</li>
                         </ul>
                     </div>
                 </div>

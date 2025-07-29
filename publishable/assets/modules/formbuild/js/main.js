@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         formSenderCheckbox.addEventListener('change', toggleGenerateButton);
-        toggleGenerateButton(); // Устанавливаем начальное состояние
+        toggleGenerateButton();
     } else {
         console.error('Элементы formSender или generateFileButton не найдены!');
     }
@@ -64,38 +64,100 @@ document.addEventListener('DOMContentLoaded', function() {
         const options = select.querySelectorAll('.custom-select__option');
         const hiddenSelect = document.getElementById('formMethod');
         
-        // Открытие/закрытие списка
         selected.addEventListener('click', function() {
             select.classList.toggle('open');
         });
         
-        // Выбор опции
         options.forEach(option => {
             option.addEventListener('click', function() {
-                // Обновляем видимый текст
                 selected.textContent = this.textContent;
-                
-                // Обновляем скрытый select
                 hiddenSelect.value = this.dataset.value;
-                
-                // Помечаем выбранную опцию
                 options.forEach(opt => opt.classList.remove('active'));
                 this.classList.add('active');
-                
-                // Закрываем список
                 select.classList.remove('open');
             });
         });
         
-        // Закрытие при клике вне списка
         document.addEventListener('click', function(e) {
             if (!select.contains(e.target)) {
                 select.classList.remove('open');
             }
         });
     });
-});
 
+    // Обработка горячих клавиш
+    document.addEventListener('keydown', function(e) {
+        // F1 - помощь
+        if (e.key === 'F1') {
+            e.preventDefault();
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                const helpModalElement = document.getElementById('helpModal');
+                const helpModal = bootstrap.Modal.getInstance(helpModalElement) || new bootstrap.Modal(helpModalElement);
+                
+                // Проверяем, открыто ли уже модальное окно
+                if (!document.querySelector('.modal.show')) {
+                    helpModal.show();
+                }
+            } else {
+                console.error('Bootstrap Modal not available');
+            }
+            return;
+        }
+
+        // Enter - генерация (если не в поле ввода)
+        if (e.key === 'Enter' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+            e.preventDefault();
+            generateMarkup();
+            return;
+        }
+
+        // Ctrl+S - сохранение
+        if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
+            e.preventDefault();
+            saveForm();
+            return;
+        }
+        if ((e.ctrlKey || e.metaKey) && e.code === 'KeyO') {
+            e.preventDefault();
+            loadForm(); // или loadSavedForm(), в зависимости от логики
+            return;
+        }
+
+        // Ctrl+1..0 - добавление полей
+        if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey) {
+            const keyToTypeMap = {
+                '1': 'text',
+                '2': 'email',
+                '3': 'tel',
+                '4': 'password',
+                '5': 'number',
+                '6': 'textarea',
+                '7': 'select',
+                '8': 'checkbox',
+                '9': 'radio',
+                '0': 'file',
+                '-': 'hidden',
+                '=': 'date'
+            };
+            
+            if (e.key in keyToTypeMap) {
+                e.preventDefault();
+                addFieldByType(keyToTypeMap[e.key]);
+            }
+        }
+    });
+
+    // Показываем подсказку при первом посещении
+    if (!localStorage.getItem('hotkeysShown')) {
+        setTimeout(() => {
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                const helpModal = new bootstrap.Modal(document.getElementById('helpModal'));
+                helpModal.show();
+            }
+            localStorage.setItem('hotkeysShown', 'true');
+        }, 2000);
+    }
+});
 function copyToClipboard(elementId) {
     const element = document.getElementById(elementId);
     const text = element.textContent || element.innerText;

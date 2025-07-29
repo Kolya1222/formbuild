@@ -45,7 +45,7 @@ return [
     'file_warning' => 'Для работы форм с файлами не забудьте:',
     'file_warning1' => 'Указать атрибут enctype="multipart/form-data"',
     'file_warning2' => 'Настроить параметры загрузки файлов в FormLister',
-    'file_warning3' => 'Проверить права на запись в папку uploads',
+    'file_warning3' => 'Проверить права на запись в папку /core/custom/forms',
     'understand' => 'Понятно',
     'field' => 'Поле',
     'required' => 'обязательное',

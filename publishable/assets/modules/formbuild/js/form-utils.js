@@ -117,3 +117,52 @@ export function initFormTabs() {
         });
     }
 }
+
+let saveLoadModalInstance = null;
+
+export function getSaveLoadModal() {
+    if (!saveLoadModalInstance) {
+        const modal = document.getElementById('saveLoadModal');
+        if (modal) {
+            saveLoadModalInstance = new bootstrap.Modal(modal);
+            
+            // Очистка при закрытии
+            modal.addEventListener('hidden.bs.modal', function() {
+                // 1. Удаляем класс modal-open с body
+                document.body.classList.remove('modal-open');
+                
+                // 2. Удаляем инлайновый padding-right (добавляется Bootstrap)
+                document.body.style.paddingRight = '';
+                
+                // 3. Удаляем оверлей (на всякий случай)
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach(backdrop => backdrop.remove());
+                
+                // 4. Восстанавливаем скролл
+                document.body.style.overflow = 'auto';
+            });
+        }
+    }
+    return saveLoadModalInstance;
+}
+
+export function openSaveLoadModal(tabId) {
+    const modal = getSaveLoadModal();
+    if (!modal) return;
+    
+    const tab = document.querySelector(`#${tabId}`);
+    if (!tab) return;
+    
+    // Переключаем вкладку без полного переоткрытия модалки
+    tab.click();
+    
+    // Открываем только если закрыто
+    if (!document.querySelector('#saveLoadModal.show')) {
+        modal.show();
+    }
+    
+    // Очищаем возможные дубли фона
+    document.querySelectorAll('.modal-backdrop').forEach(el => {
+        if (el.parentNode === document.body) el.remove();
+    });
+}

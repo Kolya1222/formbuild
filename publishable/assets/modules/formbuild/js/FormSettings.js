@@ -5,61 +5,95 @@ export function editFieldSettings(id) {
     const field = document.getElementById(`field-${id}`);
     
     let modalContent = `
-        <div class="mb-3">
-            <label class="form-label">Тип поля</label>
-            <select class="form-select" id="fieldType-${id}" onchange="updateFieldSettingsForm(${id})">
-                <option value="text">Текстовое поле</option>
-                <option value="email">Email</option>
-                <option value="tel">Телефон</option>
-                <option value="password">Пароль</option>
-                <option value="number">Число</option>
-                <option value="textarea">Текстовая область</option>
-                <option value="select">Выпадающий список</option>
-                <option value="checkbox">Чекбокс</option>
-                <option value="radio">Радиокнопки</option>
-                <option value="file">Файл</option>
-                <option value="hidden">Скрытое поле</option>
-                <option value="date">Дата</option>
-            </select>
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">Название поля (label)</label>
-            <input type="text" class="form-control" id="fieldLabel-${id}" placeholder="Введите название">
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">Имя поля (name)</label>
-            <input type="text" class="form-control" id="fieldName-${id}" placeholder="Введите имя поля (латиница)">
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">ID поля</label>
-            <input type="text" class="form-control" id="fieldId-${id}" placeholder="Введите ID или оставьте пустым">
-        </div>
-        
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="fieldRequired-${id}">
-            <label class="form-check-label" for="fieldRequired-${id}">Обязательное поле</label>
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">Placeholder</label>
-            <input type="text" class="form-control" id="fieldPlaceholder-${id}" placeholder="Текст подсказки">
-        </div>
-        
-        <div id="fieldSpecificSettings-${id}">
-            <!-- Здесь будут специфические настройки для каждого типа поля -->
-        </div>
-        
-        <div class="mb-3">
-            <label class="form-label">Ограничения (валидация)</label>
-            <div class="row">
-                <div class="col-md-6">
-                    <input type="number" class="form-control" id="fieldMinLength-${id}" placeholder="Минимальная длина">
+        <div class="modal-settings-container">
+            <!-- Заголовок секции -->
+            <div class="settings-section">
+                <h6 class="section-title"><i class="bi bi-gear me-2"></i>Основные настройки</h6>
+                
+                <div class="mb-3">
+                    <label class="form-label">Тип поля</label>
+                    <select class="form-select select-field-type" id="fieldType-${id}" onchange="updateFieldSettingsForm(${id})">
+                        <option value="text">📝 Текстовое поле</option>
+                        <option value="email">✉️ Email</option>
+                        <option value="tel">📞 Телефон</option>
+                        <option value="password">🔒 Пароль</option>
+                        <option value="number">🔢 Число</option>
+                        <option value="textarea">📋 Текстовая область</option>
+                        <option value="select">▾ Выпадающий список</option>
+                        <option value="checkbox">☑️ Чекбокс</option>
+                        <option value="radio">🔘 Радиокнопки</option>
+                        <option value="file">📎 Файл</option>
+                        <option value="hidden">👁️‍🗨️ Скрытое поле</option>
+                        <option value="date">📅 Дата</option>
+                    </select>
                 </div>
-                <div class="col-md-6">
-                    <input type="number" class="form-control" id="fieldMaxLength-${id}" placeholder="Максимальная длина">
+                
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Название (label)</label>
+                            <input type="text" class="form-control" id="fieldLabel-${id}" placeholder="Например: Ваше имя">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Имя поля (name)*</label>
+                            <input type="text" class="form-control" id="fieldName-${id}" 
+                                placeholder="Только латиница" required>
+                            <small class="text-muted">Обязательное поле</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">ID поля</label>
+                            <input type="text" class="form-control" id="fieldId-${id}" 
+                                placeholder="Оставьте пустым для автогенерации">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Placeholder</label>
+                            <input type="text" class="form-control" id="fieldPlaceholder-${id}" 
+                                placeholder="Подсказка внутри поля">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3 form-check form-switch">
+                    <input type="checkbox" class="form-check-input" id="fieldRequired-${id}">
+                    <label class="form-check-label" for="fieldRequired-${id}">Обязательное поле</label>
+                </div>
+            </div>
+            
+            <!-- Специфические настройки -->
+            <div class="settings-section" id="fieldSpecificSettings-${id}">
+                <h6 class="section-title"><i class="bi bi-tools me-2"></i>Специальные настройки</h6>
+                <div class="alert alert-info py-2">
+                    <small>Выберите тип поля чтобы увидеть дополнительные параметры</small>
+                </div>
+            </div>
+            
+            <!-- Валидация -->
+            <div class="settings-section">
+                <h6 class="section-title"><i class="bi bi-shield-check me-2"></i>Валидация</h6>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Мин. длина</label>
+                            <input type="number" class="form-control" id="fieldMinLength-${id}" 
+                                placeholder="0" min="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Макс. длина</label>
+                            <input type="number" class="form-control" id="fieldMaxLength-${id}" 
+                                placeholder="255" min="1">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

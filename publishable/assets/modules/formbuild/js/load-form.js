@@ -1,9 +1,14 @@
-import { csrfToken, showToast, getRoutes } from './form-utils.js';
+import { csrfToken, showToast, getRoutes, openSaveLoadModal } from './form-utils.js';
 import { loadFormSettings } from './form-data.js';
 import { generateMarkup } from './render-form.js';
 import { getFieldCount, setFieldCount, incrementFieldCount, createNewField } from './control-field.js';
+
 // Загрузка формы
 export function loadForm() {
+    openSaveLoadModal('load-tab');
+    if (document.querySelector('#saveLoadModal.show')) {
+        return;
+    }
     const modal = document.getElementById('saveLoadModal');
     const loadTab = document.querySelector('#load-tab');
     const bootstrapModal = new bootstrap.Modal(modal);
@@ -38,7 +43,7 @@ export function loadForm() {
     savedFormsList.innerHTML = `
         <div class="text-center py-4">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+                <span class="visually-hidden">Загрузка...</span>
             </div>
         </div>
     `;
@@ -54,7 +59,7 @@ export function loadForm() {
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-1">${form.name}</h6>
-                                <small class="text-muted">${form.description || 'No description'}</small>
+                                <small class="text-muted">${form.description || 'Без описания'}</small>
                             </div>
                             <div>
                                 <button class="btn btn-sm btn-primary me-1" onclick="loadSavedForm(${form.id})">
@@ -66,7 +71,7 @@ export function loadForm() {
                             </div>
                         </div>
                         <div class="small text-muted mt-1">
-                            Saved on: ${form.created_at}
+                            Сохранено: ${form.created_at}
                         </div>
                     </div>
                     `;
@@ -76,7 +81,7 @@ export function loadForm() {
                 savedFormsList.innerHTML = `
                     <div class="text-center py-4">
                         <i class="bi bi-folder-x fs-1 text-muted"></i>
-                        <p class="mt-2">No saved forms</p>
+                        <p class="mt-2">Нет сохраненных форм</p>
                     </div>
                 `;
             }
@@ -84,7 +89,7 @@ export function loadForm() {
         .catch(error => {
             savedFormsList.innerHTML = `
                 <div class="alert alert-danger">
-                    Error loading forms
+                    Ошибка загрузки форм
                 </div>
             `;
         });
@@ -153,7 +158,7 @@ export function loadSavedForm(formId) {
 
 // Удаление сохраненной формы
 export function deleteSavedForm(formId, element) {
-    if (!confirm('Are you sure you want to delete this form?')) return;
+    if (!confirm('Вы уверены, что хотите удалить эту форму?')) return;
     const ROUTES = getRoutes();
     fetch(ROUTES.deleteForm, {
         method: 'POST',
@@ -178,7 +183,7 @@ export function deleteSavedForm(formId, element) {
                 savedFormsList.innerHTML = `
                     <div class="text-center py-4">
                         <i class="bi bi-folder-x fs-1 text-muted"></i>
-                        <p class="mt-2">No saved forms</p>
+                        <p class="mt-2">Нет сохраненных форм</p>
                     </div>
                 `;
             }
