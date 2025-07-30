@@ -1,7 +1,7 @@
 import { showToast } from './form-utils.js';
 export function generateMarkup() {
     try {
-        const fields = document.querySelectorAll('.form-field');
+        const fields = document.querySelectorAll('#formFields > .form-field');
         const formId = document.getElementById('formId').value || 'myForm';
         const formMethod = document.getElementById('formMethod').value || 'post';
         const formAction = document.getElementById('formAction').value || '';
