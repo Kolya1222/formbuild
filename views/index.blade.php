@@ -39,6 +39,9 @@
                             <button class="btn btn-sm btn-success" onclick="generateMarkup()">
                                 <i class="bi bi-magic"></i> @lang('Formbuild::form.generate')
                             </button>
+                            <button class="btn btn-sm btn-info me-2" onclick="openEmailTemplateEditor()">
+                                <i class="bi bi-envelope"></i> @lang('Formbuild::form.email_template')
+                            </button>
                         </div>
                     </div>
 
@@ -340,8 +343,8 @@
             </div>
 
             <div class="field-summary">
-                <div><strong>@lang('Formbuild::form.name'):</strong> <span class="field-name-summary">field{id}</span></div>
-                <div><strong>@lang('Formbuild::form.label'):</strong> <span class="field-label-summary">@lang('Formbuild::form.field')
+                <div><strong>@lang('Formbuild::form.name')</strong> <span class="field-name-summary">field{id}</span></div>
+                <div><strong>@lang('Formbuild::form.label')</strong> <span class="field-label-summary">@lang('Formbuild::form.field')
                         #{number}</span></div>
             </div>
 
@@ -390,6 +393,51 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Email Template Modal -->
+    <div class="modal fade" id="emailTemplateModal" tabindex="-1" aria-labelledby="emailTemplateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emailTemplateModalLabel">
+                        <i class="bi bi-envelope"></i> @lang('Formbuild::form.email_template_editor')
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="bi bi-list-ul"></i> @lang('Formbuild::form.available_fields')
+                                </div>
+                                <div class="card-body">
+                                    <div id="emailFieldsList" class="email-fields-container">
+                                        <!-- Здесь будут поля для перетаскивания -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="bi bi-code-slash"></i> @lang('Formbuild::form.email_template')
+                                </div>
+                                <div class="card-body">
+                                    <textarea id="emailTemplateEditor" class="form-control" rows="15"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@lang('Formbuild::form.close')</button>
+                    <button type="button" class="btn btn-danger" onclick="clearEmailTemplate()">@lang('Formbuild::form.clear_template')</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEmailTemplate()">@lang('Formbuild::form.save_template')</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="generateDefaultTemplate()">@lang('Formbuild::form.generate_default')</button>
                 </div>
             </div>
         </div>

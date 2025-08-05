@@ -72,4 +72,11 @@ return [
     'no_description' => 'No description',
     'saved_on' => 'Saved',
     'form_name_required' => 'Please provide a name for the form.',
+    'email_template' => 'Email Template',
+    'email_template_editor' => 'Email Template Editor',
+    'available_fields' => 'Available Fields',
+    'save_template' => 'Save Template',
+    'generate_default' => 'Generate Default',
+    'form_data' => 'Form data',
+    'clear_template' => 'Clear',
 ];

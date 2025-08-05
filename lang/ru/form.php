@@ -72,4 +72,11 @@ return [
     'no_description' => 'Нет описания',
     'saved_on' => 'Сохранено',
     'form_name_required' => 'Пожалуйста, укажите название формы',
+    'email_template' => 'Шаблон электронной почты',
+    'email_template_editor' => 'Редактор шаблонов электронной почты',
+    'available_fields' => 'Доступные поля',
+    'save_template' => 'Сохранить шаблон',
+    'generate_default' => 'Сгенерировать по умолчанию',
+    'form_data' => 'Данные формы',
+    'clear_template' => 'Очистить',
 ];

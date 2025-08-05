@@ -6,6 +6,12 @@ import { confirmFileGeneration } from './file-generation.js';
 import { saveForm, confirmSaveForm } from './save-form.js';
 import { loadForm, loadSavedForm, deleteSavedForm } from './load-form.js';
 import { initFormTabs } from './form-utils.js';
+import { 
+  openEmailTemplateEditor, 
+  generateDefaultTemplate, 
+  saveEmailTemplate,
+  clearEmailTemplate
+} from './email-template.js';
 
 // Делаем функции глобальными для доступа из HTML
 const GLOBAL_FUNCTIONS = {
@@ -25,7 +31,11 @@ const GLOBAL_FUNCTIONS = {
     confirmSaveForm,
     loadForm,
     loadSavedForm,
-    deleteSavedForm 
+    deleteSavedForm,
+    openEmailTemplateEditor,
+    generateDefaultTemplate,
+    saveEmailTemplate,
+    clearEmailTemplate,
 };
 
 Object.entries(GLOBAL_FUNCTIONS).forEach(([name, fn]) => {

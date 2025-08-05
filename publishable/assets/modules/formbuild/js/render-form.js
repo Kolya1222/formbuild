@@ -32,8 +32,8 @@ export function generateMarkup() {
         previewOutput += `        <form id="previewForm" class="needs-validation" novalidate>\n`;
         previewOutput += `            <input type="hidden" name="formid" value="${formId}">\n`;
 
-        paramsOutput += `        'formid' => '${formId}',\n`;
-        paramsOutput += `        'rules' => [\n`;
+        paramsOutput += `    'formid' => '${formId}',\n`;
+        paramsOutput += `    'rules' => [\n`;
             
         // Собираем правила валидации
         let validationRules = [];
@@ -172,121 +172,130 @@ export function generateMarkup() {
 
             // Генерация правил валидации
             if ((required || minLength || maxLength || type === 'number' || type === 'email') && type !== 'file') {
-                let rule = `            '${name}' => [\n`;
+                let rule = `        '${name}' => [\n`;
                 
                 if (required) {
-                    rule += `                'required' => 'Обязательно введите ${label.toLowerCase()}',\n`;
+                    rule += `            'required' => 'Обязательно введите ${label.toLowerCase()}',\n`;
                 }
                 
                 if (type === 'email') {
-                    rule += `                'email' => 'Введите корректный email',\n`;
+                    rule += `            'email' => 'Введите корректный email',\n`;
                 }
                 
                 if (type === 'tel') {
-                    rule += `                'phone' => 'Введите корректный номер телефона',\n`;
+                    rule += `            'phone' => 'Введите корректный номер телефона',\n`;
                 }
                 
                 if (minLength) {
-                    rule += `                'minLength' => [\n`;
-                    rule += `                    'params' => ${minLength},\n`;
-                    rule += `                    'message' => '${label} должно быть не менее ${minLength} символов'\n`;
-                    rule += `                ],\n`;
+                    rule += `            'minLength' => [\n`;
+                    rule += `                'params' => ${minLength},\n`;
+                    rule += `                'message' => '${label} должно быть не менее ${minLength} символов'\n`;
+                    rule += `            ],\n`;
                 }
                 
                 if (maxLength) {
-                    rule += `                'maxLength' => [\n`;
-                    rule += `                    'params' => ${maxLength},\n`;
-                    rule += `                    'message' => '${label} должно быть не более ${maxLength} символов'\n`;
-                    rule += `                ],\n`;
+                    rule += `            'maxLength' => [\n`;
+                    rule += `                'params' => ${maxLength},\n`;
+                    rule += `                'message' => '${label} должно быть не более ${maxLength} символов'\n`;
+                    rule += `            ],\n`;
                 }
                 
                 if (type === 'number') {
                     if (field.dataset.min) {
-                        rule += `                'min' => Число должно быть не меньше ${field.dataset.min},\n`;
+                        rule += `            'min' => Число должно быть не меньше ${field.dataset.min},\n`;
                     }
                     if (field.dataset.max) {
-                        rule += `                'max' => Число должно быть не больше ${field.dataset.max},\n`;
+                        rule += `            'max' => Число должно быть не больше ${field.dataset.max},\n`;
                     }
                 }
                 
                 rule = rule.replace(/,\n$/, '\n');
-                rule += `            ]`;
+                rule += `        ]`;
                 validationRules.push(rule);
             }
         });
 
         paramsOutput += validationRules.join(',\n');
-        paramsOutput += `\n        ],\n`;
+        paramsOutput += `\n    ],\n`;
             
         // File rules
         if (hasFileFields) {
-            paramsOutput += `        'fileRules' => [\n`;
+            paramsOutput += `    'fileRules' => [\n`;
             
             let fileRules = [];
             fileFields.forEach(field => {
-                let rule = `            '${field.name}' => [\n`;
+                let rule = `        '${field.name}' => [\n`;
                 
                 if (field.required) {
-                    rule += `                'required' => 'Обязательно выберите файл',\n`;
+                    rule += `            'required' => 'Обязательно выберите файл',\n`;
                 }
                 if (field.optional){
-                    rule += `                'optional' => 'Пожалуйста, прикрепите файл',\n`;
+                    rule += `            'optional' => 'Пожалуйста, прикрепите файл',\n`;
                 }
                 if (field.accept) {
-                    rule += `                'allowed'=> [\n`
+                    rule += `            'allowed'=> [\n`
                     const extensions = field.accept.split(',').map(ext => ext.trim().replace(/^\./, ''));
-                    rule += `                    'params' => [[${extensions.map(ext => `"${ext}"`).join(', ')}]],\n`;
-                    rule += `                    'message'=> 'Разрешены только файлы с расширением:${extensions.map(ext => `"${ext}"`).join(', ')}'\n`;
-                    rule += `                ],\n`;
+                    rule += `                'params' => [[${extensions.map(ext => `"${ext}"`).join(', ')}]],\n`;
+                    rule += `                'message'=> 'Разрешены только файлы с расширением:${extensions.map(ext => `"${ext}"`).join(', ')}'\n`;
+                    rule += `            ],\n`;
                 }
                 
                 if (field.maxSize) {
-                    rule += `                'maxSize'=> [\n`
+                    rule += `            'maxSize'=> [\n`
                     const maxSizeKB = parseInt(field.maxSize) * 1024;
-                    rule += `                    'params' => ${maxSizeKB},\n`;
-                    rule += `                    'message'=> 'Разрешены только файлы не превыщающие ${maxSizeKB}'\n`;
-                    rule += `                ],\n`;
+                    rule += `                'params' => ${maxSizeKB},\n`;
+                    rule += `                'message'=> 'Разрешены только файлы не превыщающие ${maxSizeKB}'\n`;
+                    rule += `            ],\n`;
                 }
                 
                 rule = rule.replace(/,\n$/, '\n');
-                rule += `            ]`;
+                rule += `        ]`;
                 fileRules.push(rule);
             });
             
             paramsOutput += fileRules.join(',\n');
-            paramsOutput += `\n        ],\n`;
+            paramsOutput += `\n    ],\n`;
         }
             
         // Общие параметры формы
         if (!formSender) {
-            paramsOutput += `        'formTpl' => '@B_FILE:parts/${formId}_form',\n`;
+            paramsOutput += `    'formTpl' => '@B_FILE:parts/${formId}_form',\n`;
         }
         if (formEmail){
-            paramsOutput += `        'to' => '${formEmail}',\n`;
+            paramsOutput += `    'to' => '${formEmail}',\n`;
         }else{
-            paramsOutput += `        'to' => 'your@email.com',\n`;
+            paramsOutput += `    'to' => 'your@email.com',\n`;
         }
-        paramsOutput += `        'errorClass' => 'is-invalid',\n`;
-        paramsOutput += `        'requiredClass' => 'is-invalid',\n`;
-        paramsOutput += `        'subject' => 'Новое сообщение с формы ${formId}',\n`;
-        paramsOutput += `        'messagesOuterTpl' => '@CODE:<div class="alert alert-danger" role="alert">[+messages+]</div>',\n`;
-        paramsOutput += `        'errorTpl' => '@CODE:<span class="error-message">[+message+]</span>',\n`;
-        paramsOutput += `        'successTpl' => '@CODE:<div class="alert alert-success" role="alert">Спасибо! Ваше сообщение отправлено.</div>',\n`;
+        paramsOutput += `    'errorClass' => 'is-invalid',\n`;
+        paramsOutput += `    'requiredClass' => 'is-invalid',\n`;
+        paramsOutput += `    'subject' => 'Новое сообщение с формы ${formId}',\n`;
+        paramsOutput += `    'messagesOuterTpl' => '@CODE:<div class="alert alert-danger" role="alert">[+messages+]</div>',\n`;
+        paramsOutput += `    'errorTpl' => '@CODE:<span class="error-message">[+message+]</span>',\n`;
+        paramsOutput += `    'successTpl' => '@CODE:<div class="alert alert-success" role="alert">Спасибо! Ваше сообщение отправлено.</div>',\n`;
             
-        // Шаблон отчета
-        paramsOutput += `        'reportTpl' => '@CODE:\n`;
-        paramsOutput += `            <p>Данные формы:</p>\n`;
-        paramsOutput += `            <ul>\n`;
-            
-        fields.forEach(field => {
-            const name = field.dataset.name;
-            const label = field.dataset.label || name;
-            if (name) {
-                paramsOutput += `                <li><strong>${label}:</strong> [+${name}.value+]</li>\n`;
-            }
-        });
-            
-        paramsOutput += `            </ul>',\n`;
+        // Генерация шаблона письма
+        paramsOutput += `    'reportTpl' => '@CODE:\n`;
+        
+        // Проверяем, есть ли редактор шаблона в DOM
+        const emailEditor = document.getElementById('emailTemplateEditor');
+        if (emailEditor && emailEditor.value) {
+            // Используем сохраненный шаблон из редактора
+            paramsOutput += `        ${emailEditor.value}',\n`;
+        } else {
+            // Генерируем шаблон по умолчанию
+            paramsOutput += `        <p>Данные формы:</p>\n`;
+            paramsOutput += `        <ul>\n`;
+                
+            fields.forEach(field => {
+                const name = field.dataset.name;
+                const label = field.dataset.label || name;
+                if (name) {
+                    paramsOutput += `            <li><strong>${label}:</strong> [+${name}.value+]</li>\n`;
+                }
+            });
+                
+            paramsOutput += `        </ul>',\n`;
+        }
             
         // Завершение формы
         htmlOutput += `        <button type="submit" class="btn btn-primary">Отправить</button>\n`;
