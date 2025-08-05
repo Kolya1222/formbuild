@@ -512,3 +512,38 @@
     background-color: rgba(0,0,0,0.2);
     border-radius: 3px;
 }
+.email-field-item {
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: move;
+    transition: all 0.2s;
+}
+
+.email-field-item:hover {
+    background-color: #e9ecef;
+}
+
+.email-field-item.added {
+    opacity: 0.7;
+    background-color: #e8f5e9;
+    border-color: #81c784;
+    cursor: not-allowed;
+}
+
+.bi-check-circle-fill {
+    font-size: 0.9em;
+}
+
+.drag-over {
+    background-color: #f0f8ff;
+    outline: 2px dashed #0d6efd;
+}
+
+#emailTemplateEditor {
+    font-family: monospace;
+    min-height: 300px;
+    line-height: 1.5;
+}
