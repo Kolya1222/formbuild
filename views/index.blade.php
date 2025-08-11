@@ -16,6 +16,8 @@
 </div>
 @endsection
 @section('body')
+<div class="sectionBody">
+    <link rel="stylesheet" href="{{ MODX_BASE_URL }}assets/modules/formbuild/css/style.css">
     <div class="app-container"
     data-save-form-route="{{ route('Formbuild::save-form') }}"
     data-get-saved-forms-route="{{ route('Formbuild::get-saved-forms') }}"
@@ -442,4 +444,6 @@
             </div>
         </div>
     </div>
+    <script type="module" src="{{ MODX_BASE_URL }}assets/modules/formbuild/js/main.js"></script>
+</div>
 @endsection

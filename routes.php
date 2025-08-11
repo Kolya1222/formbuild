@@ -22,3 +22,6 @@ Route::get('/get-form', [FormbuildController::class, 'getForm'])
 // Для удаления формы
 Route::post('/delete-form', [FormbuildController::class, 'deleteForm'])
     ->name('Formbuild::delete-form');
+
+Route::get('/bbevo', [FormbuildController::class, 'bbevo'])
+    ->name('Formbuild::bbevo');

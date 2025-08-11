@@ -27,6 +27,11 @@ class FormbuildController
         return response()->view('Formbuild::index');
     }
 
+    public function bbevo(Request $request)
+    {
+        return response()->view('Formbuild::bbevo');
+    }
+
     // Генерация файла формы
     public function generateFormFile(Request $request)
     {
